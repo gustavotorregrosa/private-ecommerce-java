@@ -69,8 +69,8 @@ public class CategoryController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        if (category.id == null) {
-            response.errorMessage = "Category ID has to be null.";
+        if (!(category.id == null || category.id.toString().isEmpty())) {
+            response.errorMessage = "Category ID has to be empty.";
             return ResponseEntity.badRequest().body(response);        }
 
         if (category.name == null || category.name.isEmpty()) {
