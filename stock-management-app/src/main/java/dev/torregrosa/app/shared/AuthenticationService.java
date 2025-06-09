@@ -1,11 +1,17 @@
 package dev.torregrosa.app.shared;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import dev.torregrosa.app.domains.user.UserBaseDTO;
 import dev.torregrosa.app.domains.user.UserService;
 import dev.torregrosa.app.domains.user.UserWithHashDTO;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 public class AuthenticationService {
@@ -17,13 +23,48 @@ public class AuthenticationService {
         this.userService = userService;
     }
 
-    public boolean authenticate(String email, String password) {
+    @Value("${jwt.secret-key}")
+    private String secretKey;
+
+    @Value("${jwt.expiration-time}")
+    private long expirationTime;
+
+    @Value("${jwt.expiration-refresh-time}")
+    private long expirationRefreshTime;
+
+    public String generateJwtToken(UserBaseDTO user, boolean isRefreshToken) {
+     
+        long effectiveExpirationTime = isRefreshToken ? expirationRefreshTime : this.expirationTime;
+
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + effectiveExpirationTime);
+
+        return Jwts.builder()
+                .setSubject(user.toString())
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .compact();
+    }
+
+    public String generateJwtToken(UserBaseDTO user) {
+        return generateJwtToken(user, false);
+    }
+
+
+
+    public String authenticate(String email, String password) {
         UserWithHashDTO user = userService.getUserWithHashDTO(email);
         if (user == null) {
-            return false;
+            throw new IllegalArgumentException("User or password not found");
         }
 
-        return verifyPassword(password, user.hash);
+        if(!verifyPassword(password, user.hash)){
+            throw new IllegalArgumentException("User or password not found");
+        }
+
+        UserBaseDTO userBase = (UserBaseDTO) user;
+        return generateJwtToken(userBase);
 
     }
 
