@@ -1,4 +1,4 @@
-package dev.torregrosa.app.shared;
+package dev.torregrosa.app.shared.auth;
 
 import java.util.Date;
 
@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import dev.torregrosa.app.domains.user.UserBaseDTO;
+import dev.torregrosa.app.domains.user.UserCreateDTO;
 import dev.torregrosa.app.domains.user.UserService;
 import dev.torregrosa.app.domains.user.UserWithHashDTO;
 import io.jsonwebtoken.Jwts;
@@ -51,6 +52,14 @@ public class AuthenticationService {
         return generateJwtToken(user, false);
     }
 
+
+    public void register(UserCreateDTO userCreateDTO) {
+        if (userService.getUserWithHashDTO(userCreateDTO.email) != null) {
+            throw new IllegalArgumentException("User already exists");
+        }
+
+        userService.createUser(userCreateDTO);
+    }
 
 
     public String authenticate(String email, String password) {

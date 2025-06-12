@@ -13,7 +13,7 @@ public class UserBaseDTO {
         this.email = email;
     }
     
-    public UUID id;
+    public UUID id = null;
 
     public String name;
     
