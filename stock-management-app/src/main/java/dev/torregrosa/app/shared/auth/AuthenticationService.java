@@ -54,9 +54,9 @@ public class AuthenticationService {
 
 
     public void register(UserCreateDTO userCreateDTO) {
-        if (userService.getUserWithHashDTO(userCreateDTO.email) != null) {
-            throw new IllegalArgumentException("User already exists");
-        }
+        // if (userService.getUserWithHashDTO(userCreateDTO.email) != null) {
+        //     throw new IllegalArgumentException("User already exists");
+        // }
 
         userService.createUser(userCreateDTO);
     }
@@ -64,6 +64,12 @@ public class AuthenticationService {
 
     public String authenticate(String email, String password) {
         UserWithHashDTO user = userService.getUserWithHashDTO(email);
+        System.out.println("User found: " + user);
+        System.out.println("Email provided: " + email);
+        System.out.println("user : " + user.name);
+        System.out.println("Password provided: " + password);
+
+
         if (user == null) {
             throw new IllegalArgumentException("User or password not found");
         }
