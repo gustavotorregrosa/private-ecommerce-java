@@ -16,7 +16,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-
     @Column(nullable = false)
     private String name;
 
@@ -25,14 +24,6 @@ public class User {
 
     @Column(nullable = true, name = "password")
     private String passwordHash;
-
-
-    public User(UUID id, String name, String email, String passwordHash) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.passwordHash = passwordHash;
-    }
 
     public UUID getId() {
         return id;
