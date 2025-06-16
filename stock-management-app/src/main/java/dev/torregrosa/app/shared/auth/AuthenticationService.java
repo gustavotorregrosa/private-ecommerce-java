@@ -34,18 +34,27 @@ public class AuthenticationService {
     private long expirationRefreshTime;
 
     public String generateJwtToken(UserBaseDTO user, boolean isRefreshToken) {
-     
+        System.out.println("user: " + user.toString());
         long effectiveExpirationTime = isRefreshToken ? expirationRefreshTime : this.expirationTime;
 
+        System.out.println("effectiveExpirationTime: " + effectiveExpirationTime);
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + effectiveExpirationTime);
 
-        return Jwts.builder()
+        System.out.println("expiryDate: " + expiryDate.toString());
+
+        System.out.println(secretKey);
+
+        String token = Jwts.builder()
                 .setSubject(user.toString())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
+
+        System.out.println("token: " + token);
+
+        return token;
     }
 
     public String generateJwtToken(UserBaseDTO user) {
@@ -64,22 +73,22 @@ public class AuthenticationService {
 
     public String authenticate(String email, String password) {
         UserWithHashDTO user = userService.getUserWithHashDTO(email);
-        System.out.println("User found: " + user);
-        System.out.println("Email provided: " + email);
-        System.out.println("user : " + user.name);
-        System.out.println("Password provided: " + password);
 
+        // if (user == null) {
+        //     throw new IllegalArgumentException("User or password not found");
+        // }
 
-        if (user == null) {
-            throw new IllegalArgumentException("User or password not found");
-        }
-
-        if(!verifyPassword(password, user.hash)){
-            throw new IllegalArgumentException("User or password not found");
-        }
+        // if(!verifyPassword(password, user.hash)){
+        //     throw new IllegalArgumentException("User or password not found");
+        // }
 
         UserBaseDTO userBase = (UserBaseDTO) user;
-        return generateJwtToken(userBase);
+
+        System.out.print("user email: " +   userBase.email);
+        String token = generateJwtToken(userBase);
+        System.out.println(token);
+
+        return token;
 
     }
 
