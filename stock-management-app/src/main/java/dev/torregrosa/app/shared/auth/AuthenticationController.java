@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.torregrosa.app.domains.user.UserCreateDTO;
+import dev.torregrosa.app.shared.HttpCustomResponse;
 
 @RestController
 @RequestMapping("/auth")
@@ -22,21 +23,30 @@ public class AuthenticationController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
-        String token = authenticationService.authenticate(request.getEmail(), request.getPassword());
-        return ResponseEntity.ok(token);
+    public ResponseEntity<HttpCustomResponse<String>> login(@RequestBody LoginRequest request) {
+        HttpCustomResponse<String> response = new HttpCustomResponse<>();
+        try {
+            String token = authenticationService.authenticate(request.getEmail(), request.getPassword());
+            response.data = token;
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.errorMessage = e.getMessage();
+            return ResponseEntity.badRequest().body(response);
+        }
+
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody UserCreateDTO user) {
+    public ResponseEntity<HttpCustomResponse<String>> register(@RequestBody UserCreateDTO user) {
+        HttpCustomResponse<String> response = new HttpCustomResponse<>();
         try {
             authenticationService.register(user);
-            return ResponseEntity.ok("User registered successfully");
+            response.data = "User registered successfully";
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            throw e;
+            response.errorMessage = e.getMessage();
+            return ResponseEntity.badRequest().body(response);
         }
-        
     }
 
-   
 }
