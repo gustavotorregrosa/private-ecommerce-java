@@ -3,16 +3,36 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-// .background-filled-default{
-//     background-color: var(--background-filled-default);
-// }
-
-
-
+// Light Theme (default)
 :root {
     --background-filled-default: #cf3f3f;
+    --mat-toolbar-container-text-color: #ffffff;
+    --mat-icon-button-icon-color: #ffffff;
+    background-color: #fff;
+    color: #222;
+
     .mat-toolbar {
         background-color: var(--background-filled-default);
+        color: var(--mat-toolbar-container-text-color);
     }
+    .mat-icon-button {
+        color: var(--mat-icon-button-icon-color);
+    }
+}
 
+// Dark Theme
+[data-theme="dark"] {
+    --background-filled-default: #222;
+    --mat-toolbar-container-text-color: #cf3f3f;
+    --mat-icon-button-icon-color: #cf3f3f;
+    background-color: #181818;
+    color: #fff;
+
+    .mat-toolbar {
+        background-color: var(--background-filled-default);
+        color: var(--mat-toolbar-container-text-color);
+    }
+    .mat-icon-button {
+        color: var(--mat-icon-button-icon-color);
+    }
 }
