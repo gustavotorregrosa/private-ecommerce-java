@@ -1,8 +1,8 @@
 <mat-toolbar class="background-filled-default">
-  <button matIconButton class="example-icon" aria-label="Example icon-button with menu icon">
+  <button [matMenuTriggerFor]="menu" matIconButton class="example-icon" aria-label="Example icon-button with menu icon">
     <mat-icon>menu</mat-icon>
   </button>
-  <span>My App</span>
+  <span>Dunder Mifflin</span>
   <span class="example-spacer"></span>
   <button matIconButton class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
     <mat-icon>favorite</mat-icon>
@@ -11,3 +11,9 @@
     <mat-icon>share</mat-icon>
   </button>
 </mat-toolbar>
+
+<mat-menu #menu="matMenu">
+    <button (click)="navigateToCategories()" mat-menu-item>User profile</button>
+    <button mat-menu-item>User profile</button>
+   
+</mat-menu>

@@ -1,7 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Montserrat , Roboto, "Helvetica Neue", sans-serif; }
 
 // Light Theme (default)
 :root {
@@ -10,14 +11,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     --color-dark-intermediate: #005b96;
     --color-light-primary: #6497b1;
     --color-light-secondary: #b3cde0;
-
-
+    --color-main-background-color: var( --color-light-secondary);
     --background-filled-default: var(--color-dark-secondary);
     --mat-toolbar-container-text-color: var(--color-light-primary);
     --mat-icon-button-icon-color: var(--color-light-primary);
-    background-color: var( --color-light-secondary);
+    
     color: var(--color-light-primary);
-
     .mat-toolbar {
         background-color: var(--background-filled-default);
         color: var(--mat-toolbar-container-text-color);
@@ -25,6 +24,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     .mat-icon-button {
         color: var(--mat-icon-button-icon-color);
     }
+
+    //fonts
+    --mat-toolbar-title-text-font: 'Montserrat', sans-serif;
+    --mat-toolbar-title-text-weight: 300;
 }
 
 // Dark Theme
@@ -32,8 +35,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     --background-filled-default: var(--color-dark-primary);
     --mat-toolbar-container-text-color: var(--color-light-secondary);
     --mat-icon-button-icon-color: var(--color-light-secondary);
-    background-color: var( --color-dark-secondary);
-    color: var(--color-light-secondary);
+
+
+    --color-main-background-color: var(--color-dark-intermediate);
+
+
+
+    // background-color: var( --color-dark-secondary);
+    // color: var(--color-light-secondary);
 
    
 }
