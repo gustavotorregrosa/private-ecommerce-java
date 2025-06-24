@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import {Router} from '@angular/router';
+import { ConfigService } from '../../services/config';
 
 @Component({
   selector: 'app-navbar',
@@ -13,7 +14,10 @@ import {Router} from '@angular/router';
 })
 export class Navbar {
 
- private router = inject(Router);
+  private router = inject(Router);
+
+  constructor(public configService: ConfigService) {}
+
 
   public navigateToCategories(){
     console.log('test...')

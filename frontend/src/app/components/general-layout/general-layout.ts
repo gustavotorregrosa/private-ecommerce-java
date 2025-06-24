@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Navbar } from '../navbar/navbar';
+import { ConfigService } from '../../services/config';
 
 @Component({
   selector: 'app-general-layout',
@@ -10,7 +11,9 @@ import { Navbar } from '../navbar/navbar';
 })
 export class GeneralLayout implements OnInit {
   
-  public theme: string = 'light';
+  // public theme: string = 'light';
+
+  public constructor(public configService: ConfigService) {}
 
   ngOnInit() {
     // setTimeout(() => {
