@@ -5,10 +5,12 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import {Router} from '@angular/router';
 import { ConfigService } from '../../services/config';
+import { AuthService } from '../../services/auth';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
-  imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule],
+  imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule, CommonModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss'
 })
@@ -16,12 +18,20 @@ export class Navbar {
 
   private router = inject(Router);
 
-  constructor(public configService: ConfigService) {}
+  constructor(public configService: ConfigService, public authService: AuthService) {
 
+    setTimeout(() => {
+      console.log('Navbar initialized');
+      console.log('Auth Service:', this.authService.isAuthenticated());
+    }, 1000);
+
+  }
 
   public navigateToCategories(){
     console.log('test...')
     this.router.navigate(['/categories']);
   }
+
+
   
 }

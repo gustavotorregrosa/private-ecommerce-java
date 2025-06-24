@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../services/auth';
+import { CharactersDisplay } from '../../characters-display/characters-display';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [CharactersDisplay],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
