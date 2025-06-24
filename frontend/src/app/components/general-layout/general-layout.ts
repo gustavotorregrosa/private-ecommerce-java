@@ -13,9 +13,9 @@ export class GeneralLayout implements OnInit {
   public theme: string = 'light';
 
   ngOnInit() {
-    setTimeout(() => {
-      this.theme = 'dark';
-    }, 3000);
+    // setTimeout(() => {
+    //   this.theme = 'dark';
+    // }, 3000);
   }
 
 }

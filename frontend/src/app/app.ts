@@ -9,5 +9,5 @@ import { GeneralLayout } from './components/general-layout/general-layout';
   styleUrl: './app.scss'
 })
 export class App {
-  protected title = 'frontend';
+  protected title = 'Dunder Mifflin Paper Company';
 }
