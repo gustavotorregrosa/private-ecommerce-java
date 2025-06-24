@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { Home } from './components/pages/home/home';
 import { Categories } from './components/pages/categories/categories';
+import { isAuthGuard } from './misc/guards';
 
 export const routes: Routes = [
 
@@ -11,7 +12,9 @@ export const routes: Routes = [
 
     {
       path: 'categories',
-      component: Categories
+      component: Categories,
+      canActivate: [isAuthGuard]
+
     }
 
 ];
