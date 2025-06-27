@@ -1,1 +1,11 @@
 <p>characters-display works!</p>
+
+
+
+<div *ngFor="let character of characters">
+  <h2>{{ character.name }}</h2>
+  <p>Email: {{ character.email }}</p>
+  <p>Password: {{ character.password }}</p>
+  <img [src]="character.thumbnail" alt="{{ character.name }}" />
+  <p *ngIf="character.description">{{ character.description }}</p>
+</div>

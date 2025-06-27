@@ -3,4 +3,5 @@ export interface ICharacter {
     email: string;
     password: string;
     thumbnail: string;
+    description?: string;
 }

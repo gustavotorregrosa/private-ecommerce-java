@@ -5,7 +5,17 @@ export const characters: ICharacter[] = [
         name: "Michael Scott",
         email: "michael.scott@dunder-mifflin.com",
         password: "password",
-        thumbnail: "https://upload.wikimedia.org/wikipedia/en/7/7d/MichaelScott.png"
-    }
+        thumbnail: "assets/characters/Michael.png",
+        description: "Regional Manager at Dunder Mifflin Scranton",
+    }, 
+    {
+        name: "Dwight Schrute",
+        email: "dwight.schrute@dunder-mifflin.com",
+        password: "password",
+        thumbnail: "assets/characters/Dwight.png",
+        description: "Assistant (to the) Regional Manager at Dunder Mifflin Scranton",
+    },
+
+
 
 ]
