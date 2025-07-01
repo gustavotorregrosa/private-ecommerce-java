@@ -7,9 +7,16 @@
   <button (click)="configService.toggleTheme()" matIconButton class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
     <mat-icon>tonality</mat-icon>
   </button>
+  <button [matMenuTriggerFor]="profilemenu" *ngIf="authService.isAuthenticated()" matIconButton class="example-icon" aria-label="Example icon-button with account icon">
+    <mat-icon>account_circle</mat-icon>
+  </button>
 </mat-toolbar>
 
 <mat-menu #menu="matMenu">
     <button (click)="navigateToCategories()" mat-menu-item>Categories</button>
     <button mat-menu-item>Products</button>
+</mat-menu>
+
+<mat-menu #profilemenu="matMenu">
+    <button (click)="logout()" mat-menu-item>Logout</button>
 </mat-menu>

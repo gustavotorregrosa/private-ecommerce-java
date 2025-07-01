@@ -28,10 +28,12 @@ export class Navbar {
   }
 
   public navigateToCategories(){
-    console.log('test...')
     this.router.navigate(['/categories']);
   }
 
-
+  public logout() {
+    this.authService.setUser(null);
+    this.router.navigate(['/']);
+  }
   
 }

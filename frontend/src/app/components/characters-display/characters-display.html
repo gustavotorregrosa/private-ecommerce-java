@@ -1,11 +1,11 @@
 <p>characters-display works!</p>
 
-
-
-<div *ngFor="let character of characters">
-  <h2>{{ character.name }}</h2>
-  <p>Email: {{ character.email }}</p>
-  <p>Password: {{ character.password }}</p>
-  <img [src]="character.thumbnail" alt="{{ character.name }}" />
-  <p *ngIf="character.description">{{ character.description }}</p>
+<div class="characters-flex">
+  <mat-card (click)="onCharacterClick(character)" *ngFor="let character of characters" class="employee" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>{{ character.name }}</mat-card-title>
+      <!-- <mat-card-subtitle>{{ character.description }}</mat-card-subtitle> -->
+    </mat-card-header>
+    <img mat-card-image [src]="character.thumbnail" alt="{{ character.name }}">
+  </mat-card>
 </div>

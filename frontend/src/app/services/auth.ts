@@ -1,12 +1,21 @@
 import { Injectable, OnInit } from '@angular/core';
+import { IUser } from '../interfaces/IUser';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private _isAuthenticated: boolean = false;
-  public isAuthenticated = (): boolean => this._isAuthenticated; 
+  public isAuthenticated = (): boolean => !!this._user;
+
+  private _user: IUser | null = null;
+
+  public getUser = (): IUser | null  => this._user;
+
+  public setUser(user: IUser | null) {
+    this._user = user;
+ 
+  }
 
   constructor() {
     // setInterval(() => {
