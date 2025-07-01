@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { ICharacter } from '../../interfaces/ICharacter';
 import { AuthService } from '../../services/auth';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-characters-display',
-  imports: [CommonModule, MatCardModule],
+  imports: [CommonModule, MatCardModule, MatTooltipModule],
   templateUrl: './characters-display.html',
   styleUrl: './characters-display.scss'
 })
@@ -20,7 +21,7 @@ export class CharactersDisplay {
   public onCharacterClick(character: ICharacter): void {
     this.authService.setUser({
       id: '1',
-      email: '',
+      email: character.email,
       name: character.name,
       token: '', 
       refreshToken: ''
