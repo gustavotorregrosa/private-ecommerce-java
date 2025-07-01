@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { ICharacter } from '../../interfaces/ICharacter';
 import { AuthService } from '../../services/auth';
+import { ConfigService } from '../../services/config';  
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
@@ -16,9 +17,12 @@ export class CharactersDisplay {
 
   public characters = characters;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private configService: ConfigService) {}
 
   public onCharacterClick(character: ICharacter): void {
+
+    console.log('Character clicked:', this.configService.getApiURL());
+
     this.authService.setUser({
       id: '1',
       email: character.email,
