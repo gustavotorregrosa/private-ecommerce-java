@@ -20,10 +20,11 @@ export class CharactersDisplay {
 
   constructor(private authService: AuthService, private configService: ConfigService, private httpService: HttpService) {}
 
-  public onCharacterClick(character: ICharacter): void {
+  public async onCharacterClick(character: ICharacter): Promise<void> {
 
     console.log('Character clicked:', this.configService.getApiURL());
-    const result = await this.httpService.get<any>('/catehories')
+    const result = await this.httpService.get<any>('/categories')
+    console.log('API Response:', result);
 
 
     this.authService.setUser({
