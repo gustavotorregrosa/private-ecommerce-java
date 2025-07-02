@@ -6,6 +6,7 @@ import { ICharacter } from '../../interfaces/ICharacter';
 import { AuthService } from '../../services/auth';
 import { ConfigService } from '../../services/config';  
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { HttpService } from '../../services/httpService';
 
 @Component({
   selector: 'app-characters-display',
@@ -17,11 +18,13 @@ export class CharactersDisplay {
 
   public characters = characters;
 
-  constructor(private authService: AuthService, private configService: ConfigService) {}
+  constructor(private authService: AuthService, private configService: ConfigService, private httpService: HttpService) {}
 
   public onCharacterClick(character: ICharacter): void {
 
     console.log('Character clicked:', this.configService.getApiURL());
+    const result = await this.httpService.get<any>('/catehories')
+
 
     this.authService.setUser({
       id: '1',

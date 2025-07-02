@@ -6,7 +6,7 @@ import { GeneralLayout } from './components/general-layout/general-layout';
   selector: 'app-root',
   imports: [RouterOutlet, GeneralLayout],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
 export class App {
   protected title = 'Dunder Mifflin Paper Company';
