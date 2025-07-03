@@ -11,6 +11,7 @@ import dev.torregrosa.app.domains.user.UserBaseDTO;
 import dev.torregrosa.app.domains.user.UserCreateDTO;
 import dev.torregrosa.app.domains.user.UserService;
 import dev.torregrosa.app.domains.user.UserWithHashDTO;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -45,8 +46,13 @@ public class AuthenticationService {
 
         System.out.println(secretKey);
 
-        String token = Jwts.builder()
-                .setSubject(user.toString())
+        Claims claims = Jwts.claims();
+        claims.setSubject(user.toString());
+        claims.put("email", user.email);
+        claims.put("name", user.name);
+        claims.put("id", user.id);
+
+        String token = Jwts.builder().setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, secretKey)
@@ -90,6 +96,45 @@ public class AuthenticationService {
 
         return token;
 
+    }
+
+
+    public void getUserFromToken(String token) {
+            var claims = Jwts.parser()
+            .setSigningKey(secretKey)
+            .parseClaimsJws(token);
+
+            claims.getBody().forEach((key, value) -> {
+                System.out.println("Key: " + key + ", Value: " + value);
+            });
+            
+            // Assuming userString is a string representation of UserBaseDTO, e.g., "UserBaseDTO{name='John', email='john@example.com'}"
+            // Extract the name using a simple regex or string manipulation
+        //     String userName = null;
+        //     int nameIndex = userString.indexOf("name='");
+        //     if (nameIndex != -1) {
+        //         int start = nameIndex + 6;
+        //         int end = userString.indexOf("'", start);
+        //         if (end != -1) {
+        //         userName = userString.substring(start, end);
+        //         }
+        //     }
+        //     System.out.println("Extracted user name: " + userName);
+
+        // System.out.println("userString: " + userString);
+
+        // Assuming UserBaseDTO has a static method fromString or similar constructor
+        // If not, you need to parse userString accordingly
+        // Example:
+        // UserBaseDTO user = UserBaseDTO.fromString(userString);
+
+        // For now, just print the extracted string
+        // System.out.println("Extracted user info from token: " + userString);
+
+
+        // Implement your logic to extract user information from the token
+        // This could involve decoding a JWT or looking up a session in a database
+        // For now, this method is a placeholder
     }
 
 
