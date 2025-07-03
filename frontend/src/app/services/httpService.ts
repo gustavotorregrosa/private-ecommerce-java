@@ -22,11 +22,11 @@ export class HttpService {
                 }
             }).subscribe({
                 next: (data: T) => {
-                    console.log('HTTP GET response:', data);
+                    console.log('HTTP GET response:', {data});
                     resolve(data)
                 },
                 error: (error: any) => {
-                    console.error('HTTP GET error:', error);
+                    console.error('HTTP GET error:', {error});
                     reject(error);
                     // console.error('HTTP GET error:', error);
                     // throw new Error(`HTTP GET request failed: ${error.message}`);

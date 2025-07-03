@@ -24,9 +24,9 @@ export class CharactersDisplay {
 
     console.log('Character clicked:', this.configService.getApiURL());
     const result = await this.httpService.get<any>('/categories')
-    console.log('API Response:', result);
+    console.log({result})
 
-
+    
     this.authService.setUser({
       id: '1',
       email: character.email,
