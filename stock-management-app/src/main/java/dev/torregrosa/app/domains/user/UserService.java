@@ -7,29 +7,37 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
      
-
     @Autowired
     private final IUserRepository userRepository;
-
 
     public UserService(IUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    // public UserBaseDTO getUserByEmail(String email) {
-    //     return userRepository.findByEmail(email)
-    //             .stream()
-    //             .map(user -> new UserBaseDTO(user.getId(), user.getName(), user.getEmail()))
-    //             .findFirst()
-    //             .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
-    // }
+    public UserBaseDTO getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new RuntimeException("User not found with email: " + email);
+        }
+    
+        UserBaseDTO userBaseDTO = new UserBaseDTO();
+        userBaseDTO.id = user.getId();
+        userBaseDTO.name = user.getName();
+        userBaseDTO.email = user.getEmail();
+
+        return userBaseDTO;
+
+    }
 
      public UserWithHashDTO getUserWithHashDTO(String email) {
-         return userRepository.findByEmail(email)
-                 .stream()
-                 .map(user -> new UserWithHashDTO(user.getId(), user.getName(), user.getEmail(), user.getPasswordHash()))
-                 .findFirst()
-                 .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new RuntimeException("User not found with email: " + email);
+        }
+
+        return new UserWithHashDTO(user.getId(), user.getName(), user.getEmail(), user.getPasswordHash());
+
      }
 
   

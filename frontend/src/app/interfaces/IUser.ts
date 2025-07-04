@@ -1,7 +1,9 @@
-export interface IUser {
-    id: string;
-    email: string;
-    name: string;
+export interface IAuthenticatedUser {
+    user: {
+        id: string;
+        email: string;
+        name: string;
+    }
     token: string;
     refreshToken: string;
 }

@@ -10,4 +10,13 @@ public class UserBaseDTO {
     
     public String email;
 
+    @Override
+    public String toString() {
+        return "{" +
+                "id: '" + id + '\'' +
+                ", name: '" + name + '\'' +
+                ", email: '" + email + '\'' +
+                '}';
+    }
+
 }

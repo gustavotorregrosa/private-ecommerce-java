@@ -76,65 +76,42 @@ public class AuthenticationService {
         userService.createUser(userCreateDTO);
     }
 
-
-    public String authenticate(String email, String password) {
+    public LoginResponseDTO authenticate(String email, String password) {
         UserWithHashDTO user = userService.getUserWithHashDTO(email);
 
-        // if (user == null) {
-        //     throw new IllegalArgumentException("User or password not found");
-        // }
+        if (user == null) {
+            throw new IllegalArgumentException("User or password not found");
+        }
 
-        // if(!verifyPassword(password, user.hash)){
-        //     throw new IllegalArgumentException("User or password not found");
-        // }
+        if(!verifyPassword(password, user.hash)){
+            throw new IllegalArgumentException("User or password not found");
+        }
 
-        UserBaseDTO userBase = (UserBaseDTO) user;
-
-        System.out.print("user email: " +   userBase.email);
+        UserBaseDTO userBase = new UserBaseDTO();
+        userBase.id = user.id;
+        userBase.name = user.name;
+        userBase.email = user.email;
+        
         String token = generateJwtToken(userBase);
-        System.out.println(token);
+        String refreshToken = generateJwtToken(userBase, true);
+        LoginResponseDTO loginResponse = new LoginResponseDTO(token, refreshToken, userBase);
 
-        return token;
+        return loginResponse;
 
     }
 
 
-    public void getUserFromToken(String token) {
-            var claims = Jwts.parser()
+    public UserBaseDTO getUserFromToken(String token) {
+        var claims = Jwts.parser()
             .setSigningKey(secretKey)
             .parseClaimsJws(token);
+           
+        UserBaseDTO userDTO = userService.getUserByEmail((String) claims.getBody().get("email"));
+        if (userDTO == null) {
+            throw new IllegalArgumentException("User not found");   
+        }
 
-            claims.getBody().forEach((key, value) -> {
-                System.out.println("Key: " + key + ", Value: " + value);
-            });
-            
-            // Assuming userString is a string representation of UserBaseDTO, e.g., "UserBaseDTO{name='John', email='john@example.com'}"
-            // Extract the name using a simple regex or string manipulation
-        //     String userName = null;
-        //     int nameIndex = userString.indexOf("name='");
-        //     if (nameIndex != -1) {
-        //         int start = nameIndex + 6;
-        //         int end = userString.indexOf("'", start);
-        //         if (end != -1) {
-        //         userName = userString.substring(start, end);
-        //         }
-        //     }
-        //     System.out.println("Extracted user name: " + userName);
-
-        // System.out.println("userString: " + userString);
-
-        // Assuming UserBaseDTO has a static method fromString or similar constructor
-        // If not, you need to parse userString accordingly
-        // Example:
-        // UserBaseDTO user = UserBaseDTO.fromString(userString);
-
-        // For now, just print the extracted string
-        // System.out.println("Extracted user info from token: " + userString);
-
-
-        // Implement your logic to extract user information from the token
-        // This could involve decoding a JWT or looking up a session in a database
-        // For now, this method is a placeholder
+        return userDTO;
     }
 
 

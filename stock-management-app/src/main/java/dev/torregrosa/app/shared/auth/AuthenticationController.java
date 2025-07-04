@@ -23,11 +23,11 @@ public class AuthenticationController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<HttpCustomResponse<String>> login(@RequestBody LoginRequest request) {
-        HttpCustomResponse<String> response = new HttpCustomResponse<>();
+    public ResponseEntity<HttpCustomResponse<LoginResponseDTO>> login(@RequestBody LoginRequest request) {
+        HttpCustomResponse<LoginResponseDTO> response = new HttpCustomResponse<>();
         try {
-            String token = authenticationService.authenticate(request.getEmail(), request.getPassword());
-            response.data = token;
+            LoginResponseDTO loginResponseData = authenticationService.authenticate(request.getEmail(), request.getPassword());
+            response.data = loginResponseData;
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.errorMessage = e.getMessage();
