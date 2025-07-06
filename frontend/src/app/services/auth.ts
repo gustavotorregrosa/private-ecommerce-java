@@ -19,6 +19,7 @@ export class AuthService {
 
   public login = async (email: string, password: string): Promise<void> => {
     const authenticatedUser = await this.httpService.post<IAuthenticatedUser>('/auth/login', { email, password })
+    console.log('Authenticated user:', authenticatedUser);
     this.setUser(authenticatedUser);
   }
   

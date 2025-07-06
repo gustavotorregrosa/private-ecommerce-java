@@ -27,13 +27,7 @@ export class CharactersDisplay {
     console.log({result})
 
     
-    this.authService.setUser({
-      id: '1',
-      email: character.email,
-      name: character.name,
-      token: '', 
-      refreshToken: ''
-    })
+    this.authService.setUser(result)
   }
   
 }
