@@ -1,13 +1,15 @@
 import { Injectable, OnInit } from '@angular/core';
 import { IAuthenticatedUser } from '../interfaces/IUser';
-import { HttpService } from './httpService';
+import { HttpClient } from '@angular/common/http';
+import { ConfigService } from './config';
+import { IResponse } from '../interfaces/IResponse';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private httpService: HttpService) {}
+  constructor(private http: HttpClient, private configService: ConfigService) { }
 
   public isAuthenticated = (): boolean => !!this._user;
 
@@ -18,8 +20,19 @@ export class AuthService {
   public setUser = (user: IAuthenticatedUser | null) => this._user = user;
 
   public login = async (email: string, password: string): Promise<void> => {
-    const authenticatedUser = await this.httpService.post<IAuthenticatedUser>('/auth/login', { email, password })
-    console.log('Authenticated user:', authenticatedUser);
+
+    const authenticatedUser = await new Promise<IAuthenticatedUser>((resolve, reject) => {
+      const url: string = this.configService.getApiURL() + '/auth/login';
+      this.http.post<IResponse<IAuthenticatedUser>>(url, { email, password }).subscribe({
+        next: (data) => {
+          resolve(data.data);
+        },
+        error: (error: any) => {
+          console.error('HTTP POST error:', error);
+          reject(error);
+        }
+      });
+    });
     this.setUser(authenticatedUser);
   }
   

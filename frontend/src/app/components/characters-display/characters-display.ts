@@ -21,13 +21,8 @@ export class CharactersDisplay {
   constructor(private authService: AuthService, private configService: ConfigService, private httpService: HttpService) {}
 
   public async onCharacterClick(character: ICharacter): Promise<void> {
-
-    console.log('Character clicked:', this.configService.getApiURL());
-    const result = await this.httpService.get<any>('/categories')
-    console.log({result})
-
-    
-    this.authService.setUser(result)
+    const {email, password} = character;
+    this.authService.login(email, password);
   }
   
 }

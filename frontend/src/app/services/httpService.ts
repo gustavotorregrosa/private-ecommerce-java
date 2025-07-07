@@ -15,6 +15,9 @@ export class HttpService {
         const url: string = this.configService.getApiURL() + endpoint;
 
         return await new Promise<T>((resolve, reject) => {
+            console.log('token')
+            console.log(this.authService.getUser())
+
             this.http.get<T>(url, {
                 headers: {
                     'Content-Type': 'application/json',
