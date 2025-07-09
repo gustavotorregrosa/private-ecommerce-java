@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import dev.torregrosa.app.domains.user.UserBaseDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -24,21 +23,21 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
 
-        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-            response.setStatus(HttpServletResponse.SC_OK);
-            return false;
-        }
+        // if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+        //     response.setStatus(HttpServletResponse.SC_OK);
+        //     return false;
+        // }
 
-        try {
-            String token = getToken(request);
-            UserBaseDTO user = authenticationService.getUserFromToken(token);
-            authenticationContext.setCurrentUser(user);
+        // try {
+        //     String token = getToken(request);
+        //     UserBaseDTO user = authenticationService.getUserFromToken(token);
+        //     authenticationContext.setCurrentUser(user);
 
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid token: " + e.getMessage());
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized access: " + e.getMessage());
-            return false;
-        }
+        // } catch (IllegalArgumentException e) {
+        //     System.out.println("Invalid token: " + e.getMessage());
+        //     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized access: " + e.getMessage());
+        //     return false;
+        // }
 
         return true;
 
