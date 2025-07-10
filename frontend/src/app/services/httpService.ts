@@ -1,7 +1,16 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth';
 import { ConfigService } from './config';
+import { IAuthenticatedUser } from '../interfaces/IUser';
+import { Observable } from 'rxjs';
+import { IResponse } from '../interfaces/IResponse';
+
+
+interface IRequestOptions {
+    headers?: { [key: string]: string };
+    body?: { [key: string]: string };
+}
 
 @Injectable({
     providedIn: 'root'
@@ -13,33 +22,22 @@ export class HttpService {
     public async get<T>(endpoint: string): Promise<T> {
 
         const url: string = this.configService.getApiURL() + endpoint;
+        let response: T;
 
-        // return await new Promise<T>((resolve, reject) => {
-        //     console.log('token')
-        //     console.log(this.authService.getUser())
+        try {
+            response = await this.makeRequest<T>((url, requestParams) => this.http.get<T>(url, { headers: requestParams.headers }), url, { headers: this.getHeaders() });
+            return response;
+        } catch (error: any) {
 
-        //     this.http.get<T>(url, {
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'Authorization': this.authService.isAuthenticated() ? `Bearer ${this.authService.getUser()?.token}` : ''
-        //         }
-        //     }).subscribe({
-        //         next: (data: T) => {
-        //             console.log('HTTP GET response:', {data});
-        //             resolve(data)
-        //         },
-        //         error: (error: any) => {
-        //             console.error('HTTP GET error:', {error});
-        //             reject(error);
-        //             // console.error('HTTP GET error:', error);
-        //             // throw new Error(`HTTP GET request failed: ${error.message}`);
-        //         }
-        //     });
-        // });
+            if(error.status == 401){
+                await this.refreshToken()
+                response = await this.makeRequest<T>((url, requestParams) => this.http.get<T>(url, { headers: requestParams.headers }), url, { headers: this.getHeaders() });
+                return response;
+                
+            }
 
-    
-        
-
+            throw error;
+        }
     }
 
     public async post<T>(endpoint: string, body: any): Promise<T> {
@@ -50,6 +48,19 @@ export class HttpService {
                 error: (error: any) => {
                     reject(error);
                 }
+            });
+        });
+
+    }
+
+
+    private makeRequest<T>(fn: (url: string, requestParams: IRequestOptions) => Observable<T>, url: string, requestParams: IRequestOptions): Promise<T> {
+        return new Promise<T>((resolve, reject) => {
+            const headers = { ...this.getHeaders(), ...requestParams.headers}
+            const body = {...requestParams.body}
+            fn(url, { headers, body}).subscribe({
+                next: (data: T) => resolve(data),
+                error: (error: any) => reject(error)
             });
         });
 
@@ -68,18 +79,26 @@ export class HttpService {
         return headers;
     }
 
-
-    private async refreshToken(): Promise<void> {
+    private async refreshToken(): Promise<IAuthenticatedUser> {
         if (!this.authService.isAuthenticated()) {
             throw new Error('User is not authenticated');
         }
 
-        // Logic to refresh the token if needed
-        // This is a placeholder; actual implementation may vary
-        const user = this.authService.getUser();
-        if (user && user.token) {
-            // Assume we have a method to check token validity and refresh it
-            // await this.authService.refreshTokenIfNeeded();
-        }
+        const url: string = this.configService.getApiURL() + '/auth/refresh';
+
+        return await new Promise<IAuthenticatedUser>((resolve, reject) => {
+           this.http.get<IResponse<IAuthenticatedUser>>(url, {
+            headers: {...this.getHeaders(), 'Authorization': `Bearer ${this.authService.getUser()?.refreshToken}`}
+        }).subscribe({
+            next: (data: IResponse<IAuthenticatedUser>) => {
+                const user: IAuthenticatedUser = data.data;
+                this.authService.setUser(user);
+                resolve(user);
+            },
+            error: (error: any) => {
+                reject(error);
+            }
+        })})
+
     }
 }

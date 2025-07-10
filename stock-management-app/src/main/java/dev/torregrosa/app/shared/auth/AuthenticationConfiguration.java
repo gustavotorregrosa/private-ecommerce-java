@@ -11,7 +11,6 @@ public class AuthenticationConfiguration implements WebMvcConfigurer {
     @Autowired
     AuthenticationInterceptor authenticationInterceptor;
 
-    // Example:
      @Override
      public void addInterceptors(InterceptorRegistry registry) {
          registry.addInterceptor(authenticationInterceptor)

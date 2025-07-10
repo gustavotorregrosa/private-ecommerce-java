@@ -33,6 +33,7 @@ export class AuthService {
         }
       });
     });
+    
     this.setUser(authenticatedUser);
   }
   

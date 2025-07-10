@@ -35,16 +35,9 @@ public class AuthenticationService {
     private long expirationRefreshTime;
 
     public String generateJwtToken(UserBaseDTO user, boolean isRefreshToken) {
-        System.out.println("user: " + user.toString());
         long effectiveExpirationTime = isRefreshToken ? expirationRefreshTime : this.expirationTime;
-
-        System.out.println("effectiveExpirationTime: " + effectiveExpirationTime);
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + effectiveExpirationTime);
-
-        System.out.println("expiryDate: " + expiryDate.toString());
-
-        System.out.println(secretKey);
 
         Claims claims = Jwts.claims();
         claims.setSubject(user.toString());
@@ -58,8 +51,6 @@ public class AuthenticationService {
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
 
-        System.out.println("token: " + token);
-
         return token;
     }
 
@@ -67,13 +58,32 @@ public class AuthenticationService {
         return generateJwtToken(user, false);
     }
 
-
     public void register(UserCreateDTO userCreateDTO) {
-        // if (userService.getUserWithHashDTO(userCreateDTO.email) != null) {
-        //     throw new IllegalArgumentException("User already exists");
-        // }
+        if (userService.getUserWithHashDTO(userCreateDTO.email) != null) {
+            throw new IllegalArgumentException("User already exists");
+        }
 
         userService.createUser(userCreateDTO);
+    }
+
+    public LoginResponseDTO refreshUser(String token){
+        
+        var claims = Jwts.parser()
+            .setSigningKey(secretKey)
+            .parseClaimsJws(token);
+
+        String email = (String) claims.getBody().get("email");
+        UserBaseDTO user = userService.getUserByEmail(email);
+        
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        String newToken = generateJwtToken(user);
+        String refreshToken = generateJwtToken(user, true);
+        
+        return new LoginResponseDTO(newToken, refreshToken, user);
+
     }
 
     public LoginResponseDTO authenticate(String email, String password) {
@@ -100,7 +110,6 @@ public class AuthenticationService {
 
     }
 
-
     public UserBaseDTO getUserFromToken(String token) {
         var claims = Jwts.parser()
             .setSigningKey(secretKey)
@@ -113,7 +122,6 @@ public class AuthenticationService {
 
         return userDTO;
     }
-
 
     private boolean verifyPassword(String password, String hash) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();

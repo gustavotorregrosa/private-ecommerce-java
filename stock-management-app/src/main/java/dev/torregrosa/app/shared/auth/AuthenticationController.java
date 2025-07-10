@@ -1,6 +1,7 @@
 package dev.torregrosa.app.shared.auth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.torregrosa.app.domains.user.UserCreateDTO;
 import dev.torregrosa.app.shared.HttpCustomResponse;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/auth")
@@ -19,7 +21,29 @@ public class AuthenticationController {
 
     public AuthenticationController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
-    }           
+    }    
+    
+    @GetMapping("/refresh")
+    public ResponseEntity<HttpCustomResponse<LoginResponseDTO>> refreshToken(HttpServletRequest request){
+
+        HttpCustomResponse<LoginResponseDTO> response = new HttpCustomResponse<>();
+        try {
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                throw new IllegalArgumentException("Authorization header is missing or does not start with 'Bearer '");
+            }
+
+            String token = authHeader.substring(7);
+
+            LoginResponseDTO loginResponseData = authenticationService.refreshUser(token);
+            response.data = loginResponseData;
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.errorMessage = e.getMessage();
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
 
 
     @PostMapping("/login")
