@@ -9,6 +9,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateEditCategory } from './create-edit-category/create-edit-category';
 
+export interface IModalData {
+  action: 'create' | 'edit';
+  category?: ICategory;
+}
+
 @Component({
   selector: 'app-categories',
   imports: [MatTableModule, MatIconModule, MatButtonModule, MatCardModule],
@@ -29,12 +34,25 @@ export class Categories implements OnInit {
   public openAddModal(): void {
     const dialogRef = this.dialog.open(CreateEditCategory, {
       width: '400px',
-      data: { action: 'add' }
+      data: { action: 'create' } as IModalData
     });
 
     // dialogRef.afterClosed().subscribe(result => {
     //   if (result) {
     //     this.loadCategories(); // Reload categories after adding a new one
+    //   }
+    // });
+  }
+
+  public openEditModal(category: ICategory): void {
+    const dialogRef = this.dialog.open(CreateEditCategory, {
+      width: '400px',
+      data: { action: 'edit', category } as IModalData
+    });
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   if (result) {
+    //     this.loadCategories(); // Reload categories after editing
     //   }
     // });
   }

@@ -1,6 +1,6 @@
 <div class="custom-button-row">
-  <div class="custom-flex-container">
-    <button (click)="openAddModal()" matFab aria-label="Example icon button with a delete icon">
+  <div class="custom-flex-container float-right">
+    <button id="add-button" (click)="openAddModal()" matFab aria-label="">
       <mat-icon>add</mat-icon>
     </button>
   </div>
@@ -19,7 +19,7 @@
         <section>
           <div class="custom-button-row">
             <div class="custom-flex-container">
-              <button (click)="doEdit(element)" matFab aria-label="Example icon button with a delete icon">
+              <button (click)="openEditModal(element)" matFab aria-label="Example icon button with a delete icon">
                 <mat-icon>edit</mat-icon>
               </button>
             </div>

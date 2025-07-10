@@ -1,1 +1,11 @@
-<p>create-edit-category works!</p>
+<div>
+    <p>
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input [(ngModel)]="name" matInput placeholder="Name">
+            <mat-hint>Category name</mat-hint>
+        </mat-form-field>
+    </p>
+
+    <button (click)="saveCategory()" matButton="elevated">Create</button>
+</div>
