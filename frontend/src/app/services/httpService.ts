@@ -33,6 +33,26 @@ export class HttpService {
                 await this.refreshToken()
                 response = await this.makeRequest<T>((url, requestParams) => this.http.get<T>(url, { headers: requestParams.headers }), url, { headers: this.getHeaders() });
                 return response;
+            }
+
+            throw error;
+        }
+    }
+
+    public async delete<T>(endpoint: string): Promise<T> {
+
+        const url: string = this.configService.getApiURL() + endpoint;
+        let response: T;
+
+        try {
+            response = await this.makeRequest<T>((url, requestParams) => this.http.delete<T>(url, requestParams), url, { headers: this.getHeaders() });
+            return response;
+        } catch (error: any) {
+
+            if(error.status == 401){
+                await this.refreshToken()
+                response = await this.makeRequest<T>((url, requestParams) => this.http.delete<T>(url, requestParams), url, { headers: this.getHeaders() });
+                return response;
                 
             }
 
@@ -40,32 +60,70 @@ export class HttpService {
         }
     }
 
-    public async post<T>(endpoint: string, body: any): Promise<T> {
 
-        return await new Promise<T>((resolve, reject) => {
-            this.http.post<T>(endpoint, body).subscribe({
-                next: (data: T) => resolve(data),
-                error: (error: any) => {
-                    reject(error);
-                }
-            });
-        });
+    public async put<T>(endpoint: string, body: { [key: string]: string }): Promise<T> {
 
+        const url: string = this.configService.getApiURL() + endpoint;
+        let response: T;
+
+        try {
+            response = await this.makeRequest<T>(
+                (url, requestParams) => this.http.put<T>(url, requestParams.body, requestParams), 
+                url, 
+                { body }
+            );
+
+            return response;
+        } catch (error: any) {
+
+            if(error.status == 401){
+                await this.refreshToken()
+                response = await this.makeRequest<T>(
+                    (url, requestParams) => this.http.put<T>(url, requestParams.body, requestParams), 
+                    url, 
+                    {  body }
+                );
+                return response;
+                
+            }
+
+            throw error;
+        }
+    }
+
+
+    public async post<T>(endpoint: string, body:  { [key: string]: string }): Promise<T> {
+
+        const url: string = this.configService.getApiURL() + endpoint;
+        let response: T;
+
+        try {
+            response = await this.makeRequest<T>((url, requestParams) => this.http.post<T>(url, requestParams.body, requestParams), url, { body });
+            return response;
+        } catch (error: any) {
+
+            if(error.status == 401){
+                await this.refreshToken()
+                response = await this.makeRequest<T>((url, requestParams) => this.http.post<T>(url, requestParams.body, requestParams), url, { body });
+                return response;
+            }
+
+            throw error;
+        }
     }
 
 
     private makeRequest<T>(fn: (url: string, requestParams: IRequestOptions) => Observable<T>, url: string, requestParams: IRequestOptions): Promise<T> {
         return new Promise<T>((resolve, reject) => {
-            const headers = { ...this.getHeaders(), ...requestParams.headers}
+            const headers = { ...this.getHeaders(), ...requestParams.headers}  
             const body = {...requestParams.body}
+           
             fn(url, { headers, body}).subscribe({
                 next: (data: T) => resolve(data),
                 error: (error: any) => reject(error)
             });
         });
-
     }
-
 
     private getHeaders(): { [key: string]: string } {
         const headers: { [key: string]: string } = {

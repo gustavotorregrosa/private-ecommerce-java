@@ -4,7 +4,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { IModalData } from '../categories';
+import { IModalData } from '../main/categories';
+import { CategoriesService } from '../../../../services/categoriesService';
+import { ICategory } from '../../../../interfaces/ICategory';
 
 @Component({
   selector: 'app-create-edit-category',
@@ -18,7 +20,7 @@ export class CreateEditCategory implements OnInit {
     public action: 'Create' | 'Save' = 'Create';
     public name: string = '';
 
-    constructor(private editCreateModal: MatDialogRef<CreateEditCategory>, @Inject(MAT_DIALOG_DATA) private modalData: IModalData) {}
+    constructor(private categoriesService: CategoriesService,  private editCreateModal: MatDialogRef<CreateEditCategory>, @Inject(MAT_DIALOG_DATA) private modalData: IModalData) {}
     
     public ngOnInit(): void {
         if (this.modalData && this.modalData.category) {
@@ -32,16 +34,22 @@ export class CreateEditCategory implements OnInit {
         }
     }
 
-    public saveCategory(): void {
+    public async saveCategory(): Promise<void> {
       if (!this.name.trim()) {
         console.error('Category name cannot be empty');
         return;
       }
 
-      console.log('Category saved:', this.name);
-      console.log('Modal data:', this.modalData);
+      if(this.action === 'Create') {
+        await this.categoriesService.create({ name: this.name } as ICategory);
+      }
 
-      this.editCreateModal.close(this.name); // Close the dialog and pass the name back
+      if(this.action === 'Save') {
+        await this.categoriesService.update({ id: this.id, name: this.name } as ICategory);
+      }
+
+      this.editCreateModal.close(this.name);
+      
     }
 
 }

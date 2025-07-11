@@ -1,9 +1,10 @@
 package dev.torregrosa.app.domains.category;
 
-import dev.torregrosa.app.shared.IService;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import dev.torregrosa.app.shared.IService;
 
 @Service
 public class CategoryService implements IService<CategoryBaseDTO, UUID> {
@@ -18,7 +19,9 @@ public class CategoryService implements IService<CategoryBaseDTO, UUID> {
     public CategoryBaseDTO save(CategoryBaseDTO dto) {
         Category category = new Category();
         category.setName(dto.name);
+        if(dto.id != null) category.setId(dto.id);
         category = categoryRepository.save(category);
+
         dto.id = category.getId();
         return dto;
     }

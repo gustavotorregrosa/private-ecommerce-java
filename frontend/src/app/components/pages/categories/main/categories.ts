@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpService } from '../../../services/httpService';
-import { ICategory } from '../../../interfaces/ICategory';
-import { IResponse } from '../../../interfaces/IResponse';
+import { HttpService } from '../../../../services/httpService';
+import { ICategory } from '../../../../interfaces/ICategory';
+import { IResponse } from '../../../../interfaces/IResponse';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
-import { CreateEditCategory } from './create-edit-category/create-edit-category';
+import { CreateEditCategory } from '../create-edit-category/create-edit-category';
 
 export interface IModalData {
   action: 'create' | 'edit';
@@ -32,29 +32,17 @@ export class Categories implements OnInit {
   }
 
   public openAddModal(): void {
-    const dialogRef = this.dialog.open(CreateEditCategory, {
+    const dialogCreateEditRef = this.dialog.open(CreateEditCategory, {
       width: '400px',
       data: { action: 'create' } as IModalData
     });
-
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result) {
-    //     this.loadCategories(); // Reload categories after adding a new one
-    //   }
-    // });
   }
 
   public openEditModal(category: ICategory): void {
-    const dialogRef = this.dialog.open(CreateEditCategory, {
+    const dialogCreateEditRef = this.dialog.open(CreateEditCategory, {
       width: '400px',
       data: { action: 'edit', category } as IModalData
     });
-
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result) {
-    //     this.loadCategories(); // Reload categories after editing
-    //   }
-    // });
   }
 
   private async loadCategories(): Promise<void> {
@@ -63,12 +51,12 @@ export class Categories implements OnInit {
 
   }
 
-  public async doDelete(category: ICategory): Promise<void> {
+  public openDeleteModal(category: ICategory): void {
     console.log('Deleting category:', category);
-  }
-
-  public async doEdit(category: ICategory): Promise<void> {
-    console.log('Editing category:', category);
+    const dialogDeleteRef = this.dialog.open(CreateEditCategory, {
+      width: '400px',
+      data: { category } as IModalData
+    });
   }
 
 }

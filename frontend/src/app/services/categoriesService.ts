@@ -23,26 +23,16 @@ export class CategoriesService {
     }
 
     public async create(category: ICategory): Promise<ICategory> {
-        const response = await this.httpService.post<ICategory>(this.endpoint, category);
+        const response = await this.httpService.post<ICategory>(this.endpoint, category as any);
         return response;
     }
     
-    // public async getCategories(): Promise<ICategory[]> {
-    //     const response = await this.httpService.get<IResponse<ICategory[]>>('/categories');
-    //     return response.data;
-    // }
+    public async update(category: ICategory): Promise<ICategory> {
+        const response = await this.httpService.put<ICategory>(`/categories/${category.id}`, category as any);
+        return response;
+    }
     
-    // public async createCategory(category: ICategory): Promise<ICategory> {
-    //     const response = await this.httpService.post<IResponse<ICategory>>('/categories', category);
-    //     return response.data;
-    // }
-    
-    // public async updateCategory(category: ICategory): Promise<ICategory> {
-    //     const response = await this.httpService.put<IResponse<ICategory>>(`/categories/${category.id}`, category);
-    //     return response.data;
-    // }
-    
-    // public async deleteCategory(categoryId: string): Promise<void> {
-    //     await this.httpService.delete(`/categories/${categoryId}`);
-    // }
+    public async delete(categoryId: string): Promise<void> {
+        await this.httpService.delete(`/categories/${categoryId}`);
+    }
 }
