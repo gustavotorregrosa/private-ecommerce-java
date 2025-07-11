@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateEditCategory } from '../create-edit-category/create-edit-category';
+import { DeleteCategory } from '../delete-category/delete-category';
 
 export interface IModalData {
   action: 'create' | 'edit';
@@ -53,7 +54,7 @@ export class Categories implements OnInit {
 
   public openDeleteModal(category: ICategory): void {
     console.log('Deleting category:', category);
-    const dialogDeleteRef = this.dialog.open(CreateEditCategory, {
+    const dialogDeleteRef = this.dialog.open(DeleteCategory, {
       width: '400px',
       data: { category } as IModalData
     });

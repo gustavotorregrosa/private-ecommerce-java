@@ -1,10 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IModalData } from '../main/categories';
+import { MatButtonModule } from '@angular/material/button';
+import { CategoriesService } from '../../../../services/categoriesService';
 
 @Component({
   selector: 'app-delete-category',
-  imports: [],
+  imports: [MatButtonModule],
   templateUrl: './delete-category.html',
   styleUrl: './delete-category.scss'
 })
@@ -13,7 +15,7 @@ export class DeleteCategory implements OnInit {
     public id: string | null = null;
     public name: string = '';
 
-    constructor(@Inject(MAT_DIALOG_DATA) private modalData: IModalData) {}
+    constructor(private deleteModal: MatDialogRef<DeleteCategory> , @Inject(MAT_DIALOG_DATA) private modalData: IModalData, private categoriesService: CategoriesService) {}
 
     public ngOnInit(): void {
         if (this.modalData && this.modalData.category) {
@@ -22,11 +24,11 @@ export class DeleteCategory implements OnInit {
         }
     }
 
-    public deleteCategory(): void {
+    public async deleteCategory(): Promise<void> {
         if (this.id) {
             console.log(`Deleting category with ID: ${this.id}`);
-            // Here you would typically call a service to delete the category
-            // this.categoriesService.delete(this.id);
+            await this.categoriesService.delete(this.id);
+            this.deleteModal.close(this.id);
         } else {
             console.error('No category ID provided for deletion');
         }
