@@ -14,6 +14,8 @@ export class ConfigService {
   }
 
   public getApiURL = () => development.apiUrl;
+
+  public getWSApiURL = () => development.socketUrl;
   
   constructor() { }
 }

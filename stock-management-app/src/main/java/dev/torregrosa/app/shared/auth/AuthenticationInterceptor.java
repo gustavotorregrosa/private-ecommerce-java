@@ -45,8 +45,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 throw new IllegalArgumentException("Invalid token: User not found");
             }
 
-            System.out.println("User: " + user);
-
             authenticationContext.setCurrentUser(user);
 
         } catch (Exception e) {
