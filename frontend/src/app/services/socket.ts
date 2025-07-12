@@ -10,9 +10,11 @@ export class SocketService {
     constructor(private configService: ConfigService) {}
 
     connect(): void {
-        if (this.socket) {
-            this.disconnect();
-        }
+        // if (this.socket) {
+        //     this.disconnect();
+        // }
+
+        this.disconnect();
 
         // const url = this.configService.getApiURL().replace(/^http/, 'ws') + '/ws';
         const url = this.configService.getWSApiURL();
