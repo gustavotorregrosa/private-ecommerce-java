@@ -11,6 +11,11 @@ import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 public class RedisConfig {
 
     @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+        return new org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory();
+    }
+
+    @Bean
     public StringRedisTemplate redisTemplate(RedisConnectionFactory connectionFactory) {
         return new StringRedisTemplate(connectionFactory);
     }
@@ -28,5 +33,4 @@ public class RedisConfig {
         return new MessageListenerAdapter(subscriber);
     }
 
-    
 }

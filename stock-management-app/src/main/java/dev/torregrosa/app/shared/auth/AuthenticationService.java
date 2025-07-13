@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +22,13 @@ public class AuthenticationService {
     @Autowired
     private final UserService userService;
 
-    public AuthenticationService(UserService userService) {
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
+    public AuthenticationService(UserService userService, StringRedisTemplate redisTemplate) {
         this.userService = userService;
+        this.redisTemplate = redisTemplate;
+       
     }
 
     @Value("${jwt.secret-key}")
@@ -105,6 +111,18 @@ public class AuthenticationService {
         String token = generateJwtToken(userBase);
         String refreshToken = generateJwtToken(userBase, true);
         LoginResponseDTO loginResponse = new LoginResponseDTO(token, refreshToken, userBase);
+
+        // new Thread(() -> {
+        //     String sessionId = java.util.UUID.randomUUID().toString();
+        //     JSONObject authInfo = new JSONObject();
+        //     authInfo.put("name", userBase.name);
+        //     authInfo.put("email", userBase.email);
+        //     authInfo.put("sessionId", sessionId);
+
+        //     redisTemplate.convertAndSend("websocket-channel", "User authenticated: " + userBase.email);
+          
+        // }).start();
+
 
         return loginResponse;
 

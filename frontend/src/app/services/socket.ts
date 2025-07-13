@@ -10,10 +10,7 @@ export class SocketService {
     constructor(private configService: ConfigService) {}
 
     connect(): void {
-        // if (this.socket) {
-        //     this.disconnect();
-        // }
-
+     
         this.disconnect();
 
         // const url = this.configService.getApiURL().replace(/^http/, 'ws') + '/ws';
@@ -22,6 +19,11 @@ export class SocketService {
 
         this.socket.onopen = () => {
             console.log('WebSocket connected');
+        };
+
+        this.socket.onmessage = (event) => {
+            console.log('WebSocket message received:', event.data);
+            console.log({event})
         };
 
         this.socket.onclose = () => {

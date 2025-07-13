@@ -3,13 +3,14 @@ import { IAuthenticatedUser } from '../interfaces/IUser';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from './config';
 import { IResponse } from '../interfaces/IResponse';
+import { SocketService } from './socket';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private http: HttpClient, private configService: ConfigService) { }
+  constructor(private http: HttpClient, private configService: ConfigService, private socketService: SocketService) { }
 
   public isAuthenticated = (): boolean => !!this._user;
 
@@ -35,7 +36,12 @@ export class AuthService {
     });
     
     this.setUser(authenticatedUser);
+
+    // this.socketService.send(JSON.stringify({
+    //   type: 'login',
+    //   user:  authenticatedUser.user
+       
+    // }));
   }
   
-
 }

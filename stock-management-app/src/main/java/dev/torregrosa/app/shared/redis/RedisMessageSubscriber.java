@@ -1,8 +1,8 @@
 package dev.torregrosa.app.shared.redis;
 
-import org.springframework.stereotype.Component;
-import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.connection.Message;
+import org.springframework.data.redis.connection.MessageListener;
+import org.springframework.stereotype.Component;
 
 @Component
 public class RedisMessageSubscriber implements MessageListener {
