@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.torregrosa.app.domains.user.UserCreateDTO;
 import dev.torregrosa.app.shared.HttpCustomResponse;
+import dev.torregrosa.app.shared.socket.WebSocketHandler;
+import dev.torregrosa.app.shared.socket.WebSocketMessageTemplate;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
@@ -19,8 +21,12 @@ public class AuthenticationController {
     @Autowired
     private final AuthenticationService authenticationService;
 
-    public AuthenticationController(AuthenticationService authenticationService) {
+    @Autowired
+    private final WebSocketHandler webSocketHandler;
+
+    public AuthenticationController(AuthenticationService authenticationService, WebSocketHandler webSocketHandler) {
         this.authenticationService = authenticationService;
+        this.webSocketHandler = webSocketHandler;
     }    
     
     @GetMapping("/refresh")
@@ -44,20 +50,21 @@ public class AuthenticationController {
         }
     }
 
-
-
     @PostMapping("/login")
-    public ResponseEntity<HttpCustomResponse<LoginResponseDTO>> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<HttpCustomResponse<LoginResponseDTO>> login(@RequestBody LoginRequest loginDTORequest, HttpServletRequest httpRequest) {
         HttpCustomResponse<LoginResponseDTO> response = new HttpCustomResponse<>();
         try {
-            LoginResponseDTO loginResponseData = authenticationService.authenticate(request.getEmail(), request.getPassword());
+            String socketSessionID = httpRequest.getHeader("socket-session-id");
+            LoginResponseDTO loginResponseData = authenticationService.authenticate(loginDTORequest.getEmail(), loginDTORequest.getPassword());
             response.data = loginResponseData;
+
+            webSocketHandler.sendToRedis(new WebSocketMessageTemplate("new user " + loginDTORequest.getEmail(), socketSessionID, "new-login"));
+
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.errorMessage = e.getMessage();
             return ResponseEntity.badRequest().body(response);
         }
-
     }
 
     @PostMapping("/register")

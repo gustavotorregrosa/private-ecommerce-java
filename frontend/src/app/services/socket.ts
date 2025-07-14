@@ -1,29 +1,65 @@
 import { Injectable } from "@angular/core";
 import { ConfigService } from "./config";
+import { ISocketMessage, ISocketTopic } from "../interfaces/ISocketMessage";
 
 @Injectable({
   providedIn: 'root'
 })
 export class SocketService {
     private socket: WebSocket | null = null;
+    private sessionId: string | null = null;
 
-    constructor(private configService: ConfigService) {}
+    private socketEvents: { 
+        topic: ISocketTopic,
+        fn: (message: ISocketMessage) => void
+    
+    }[] = []
+
+    constructor(private configService: ConfigService) {
+
+        this.socketEvents.push({
+            topic: ISocketTopic.SET_SESSION_ID,
+            fn: (message: ISocketMessage) => {
+                this.sessionId = message.sessionId;
+                console.log('Session ID set:', message.sessionId);
+            }}
+        )
+
+    }
+
+    public getSessionId(): string | null {
+        return this.sessionId;
+    }
 
     connect(): void {
-     
         this.disconnect();
-
-        // const url = this.configService.getApiURL().replace(/^http/, 'ws') + '/ws';
         const url = this.configService.getWSApiURL();
         this.socket = new WebSocket(url);
 
         this.socket.onopen = () => {
-            console.log('WebSocket connected');
-        };
+           
+            const dummyMessage: ISocketMessage = {
+                topic: ISocketTopic.SET_SESSION_ID,
+                sessionId: this.sessionId || '123',
+                message: 'ola mundoo...'
+            }
 
-        this.socket.onmessage = (event) => {
-            console.log('WebSocket message received:', event.data);
-            console.log({event})
+            setTimeout(() => {
+                console.log('WebSocket connected:', url);
+                this.send(JSON.stringify(dummyMessage));
+            }, 4000);
+
+            this.socket!.onmessage = ({data}) => {
+                console.log({data})
+                try {
+                    const socketEvent: ISocketMessage = JSON.parse(data);
+                    this.socketEvents.filter(event => event.topic === socketEvent.topic).map(event => event.fn(socketEvent));
+                } catch (error) {
+                    console.error('Error parsing WebSocket message:', error);
+                    return;
+                }
+
+            };
         };
 
         this.socket.onclose = () => {

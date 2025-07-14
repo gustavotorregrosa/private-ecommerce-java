@@ -112,17 +112,6 @@ public class AuthenticationService {
         String refreshToken = generateJwtToken(userBase, true);
         LoginResponseDTO loginResponse = new LoginResponseDTO(token, refreshToken, userBase);
 
-        // new Thread(() -> {
-        //     String sessionId = java.util.UUID.randomUUID().toString();
-        //     JSONObject authInfo = new JSONObject();
-        //     authInfo.put("name", userBase.name);
-        //     authInfo.put("email", userBase.email);
-        //     authInfo.put("sessionId", sessionId);
-
-        //     redisTemplate.convertAndSend("websocket-channel", "User authenticated: " + userBase.email);
-          
-        // }).start();
-
 
         return loginResponse;
 

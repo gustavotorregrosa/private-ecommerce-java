@@ -17,9 +17,9 @@ export class App implements OnInit {
 
   ngOnInit(): void {
     this.socketService.connect();
-    this.socketService.onMessage((event) => {
-      console.log({event});
-      console.log('Message received from WebSocket:', event.data);
-    });
+    // this.socketService.onMessage((event) => {
+    //   console.log({event});
+    //   console.log('Message received from WebSocket:', event.data);
+    // });
   }
 }

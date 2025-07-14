@@ -24,7 +24,11 @@ export class AuthService {
 
     const authenticatedUser = await new Promise<IAuthenticatedUser>((resolve, reject) => {
       const url: string = this.configService.getApiURL() + '/auth/login';
-      this.http.post<IResponse<IAuthenticatedUser>>(url, { email, password }).subscribe({
+      this.http.post<IResponse<IAuthenticatedUser>>(url, { email, password }, {
+        headers: {
+          'socket-session-id': this.socketService.getSessionId() || ''
+        }
+      }).subscribe({
         next: (data) => {
           resolve(data.data);
         },

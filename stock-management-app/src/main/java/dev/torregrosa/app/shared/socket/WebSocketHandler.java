@@ -1,8 +1,6 @@
 package dev.torregrosa.app.shared.socket;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -22,33 +20,68 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     private HashMap<String, WebSocketSession> sessions;
 
-    private List<WebSocketFunction> functions;
-
     public WebSocketHandler() {
         sessions = new HashMap<>();
-        functions = new ArrayList<>();
     }
 
-    public void addFunction(WebSocketFunction function) {
-        functions.add(function);
+    public void sendToRedis(WebSocketMessageTemplate message) {
+        redisTemplate.convertAndSend(CHANNEL_NAME, message.toString());
     }
+
+    public void sendToInstances(String messageFromRedis) {
+        try {
+
+            WebSocketMessageTemplate _message = WebSocketMessageTemplate.fromJson(messageFromRedis);
+
+            switch (_message.topic) {
+                case "new-login":
+                    for (WebSocketSession session : sessions.values()) {
+
+                         WebSocketMessageTemplate message = WebSocketMessageTemplate.fromJson(messageFromRedis);
+
+                        if(session.getId().equals(message.sessionId)) {
+                            System.out.println("Sending message to session: " + session.getId());
+                            message.message = "Welcome ";
+                            session.sendMessage(new TextMessage(message.toString()));
+                        } else {
+                            message.sessionId = session.getId();
+                            System.out.println("Skipping message for own session: " + session.getId());
+                            session.sendMessage(new TextMessage(message.toString()));
+                        }
+
+                        // if (session.isOpen()) {
+                        //      session.sendMessage(new TextMessage(message.toString()));
+                        //     // if(!session.getId().equals(message.sessionId)) {
+                        //     //     session.sendMessage(new TextMessage(message.toString()));
+                        //     // }
+                        // }
+                    }
+                    
+                    break;
+                default:
+                    System.out.println("Unknown topic: " + _message.topic);
+                    break;
+            }
+        } catch (Exception e) {
+            System.err.println("Error processing message from Redis: " + e.getMessage());
+            return;
+        }
+       
+    }
+
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        System.out.println("WebSocket connection established: " + session.getRemoteAddress());
-        System.out.println("Session ID: " + session.getId());
-        System.out.println("Session URI: " + session.getUri());
+        WebSocketMessageTemplate messageTemplate = new WebSocketMessageTemplate(
+            "WebSocket connection established",
+            session.getId(),
+            "set-session-id"
+        );
 
-        
-   
-       
-
-        
-
-        session.sendMessage(new TextMessage("Welcome to the WebSocket server!" + session.getId()));
-
+        session.sendMessage(new TextMessage(messageTemplate.toString()));
         sessions.put(session.getId(), session);
-        redisTemplate.convertAndSend("websocket-channel", "New WebSocket connection established: " + session.getId());
+
+        // redisTemplate.convertAndSend("websocket-channel", "New WebSocket connection established: " + session.getId());
     }
 
     @Override
@@ -60,25 +93,13 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        System.out.println("Received message: " + message.getPayload() + " from session: " + session.getId());
-        // session.sendMessage(new TextMessage("Message received"));
+        String payload = message.getPayload(); 
+        WebSocketMessageTemplate socketMessage = WebSocketMessageTemplate.fromJson(payload);
 
-        for (String sessionId : sessions.keySet()) {
-            System.out.println("Session ID: " + sessionId + ", Session: " + sessions.get(sessionId));
+        System.out.println("Received message: " + socketMessage.toString() + " from session: " + session.getId());
+        System.out.println("topic...: " + socketMessage.topic + " - " + socketMessage.sessionId);
 
-            WebSocketSession _session = sessions.get(sessionId);
-            if (_session.isOpen()) {
-                for (WebSocketFunction _function : functions) {
-                    _function.setParams(_session, session.getId(), message.getPayload());
-                    _function.run();
-                    System.out.println("Function executed for session: " + sessionId);
-                }
-            } else {
-                System.out.println("Session " + sessionId + " is not open.");
-            }
-        }
-
-
+        
     }
 
 }
