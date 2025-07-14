@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { GeneralLayout } from './components/general-layout/general-layout';
 import { SocketService } from './services/socket';
+import "toastify-js/src/toastify.css"
 
 @Component({
   selector: 'app-root',

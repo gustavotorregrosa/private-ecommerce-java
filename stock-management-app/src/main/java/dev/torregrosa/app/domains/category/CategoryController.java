@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.torregrosa.app.shared.HttpCustomResponse;
+import dev.torregrosa.app.shared.socket.WebSocketHandler;
+import dev.torregrosa.app.shared.socket.WebSocketMessageTemplate;
 
 @RestController
 @RequestMapping("/categories")
@@ -22,6 +24,9 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private WebSocketHandler webSocketHandler;
 
     @GetMapping
     public ResponseEntity<HttpCustomResponse<Iterable<CategoryBaseDTO>>> getAllCategories() {
@@ -81,6 +86,8 @@ public class CategoryController {
         try {
             CategoryBaseDTO _category = categoryService.save(category);
             response.data = _category;
+            webSocketHandler.sendToRedis(new WebSocketMessageTemplate(null , null, "refresh-categories"));
+            
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
             response.errorMessage = "Error creating category: " + e.getMessage();
@@ -119,8 +126,9 @@ public class CategoryController {
             category.id = id; 
             category = categoryService.save(category);
             response.data = category;
-            return ResponseEntity.ok(response);
 
+            webSocketHandler.sendToRedis(new WebSocketMessageTemplate(null , null, "refresh-categories"));
+            return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             response.errorMessage = "Error updating category: " + e.getMessage();

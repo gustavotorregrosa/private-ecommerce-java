@@ -36,25 +36,22 @@ public class WebSocketHandler extends TextWebSocketHandler {
             switch (_message.topic) {
                 case "new-login":
                     for (WebSocketSession session : sessions.values()) {
-
                          WebSocketMessageTemplate message = WebSocketMessageTemplate.fromJson(messageFromRedis);
-
                         if(session.getId().equals(message.sessionId)) {
-                            System.out.println("Sending message to session: " + session.getId());
-                            message.message = "Welcome ";
+                            message.message = "Welcome to Dunder Mifflin";
                             session.sendMessage(new TextMessage(message.toString()));
                         } else {
                             message.sessionId = session.getId();
-                            System.out.println("Skipping message for own session: " + session.getId());
                             session.sendMessage(new TextMessage(message.toString()));
                         }
+                    }
+                    
+                    break;
 
-                        // if (session.isOpen()) {
-                        //      session.sendMessage(new TextMessage(message.toString()));
-                        //     // if(!session.getId().equals(message.sessionId)) {
-                        //     //     session.sendMessage(new TextMessage(message.toString()));
-                        //     // }
-                        // }
+                case "refresh-categories":
+                    for (WebSocketSession session : sessions.values()) {
+                        WebSocketMessageTemplate message = WebSocketMessageTemplate.fromJson(messageFromRedis);
+                        session.sendMessage(new TextMessage(message.toString()));
                     }
                     
                     break;

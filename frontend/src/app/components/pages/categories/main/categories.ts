@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpService } from '../../../../services/httpService';
 import { ICategory } from '../../../../interfaces/ICategory';
 import { IResponse } from '../../../../interfaces/IResponse';
@@ -9,6 +9,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateEditCategory } from '../create-edit-category/create-edit-category';
 import { DeleteCategory } from '../delete-category/delete-category';
+import { refreshCategoriesObservable } from '../../../../misc/observables';
+import { Subscription } from 'rxjs';
+
 
 export interface IModalData {
   action: 'create' | 'edit';
@@ -21,15 +24,24 @@ export interface IModalData {
   templateUrl: './categories.html',
   styleUrl: './categories.scss'
 })
-export class Categories implements OnInit {
+export class Categories implements OnInit, OnDestroy {
 
   public categories: ICategory[] = [];
   displayedColumns: string[] = ['name', 'actions']; 
+  private subscription: Subscription | null = null;
 
   constructor(private httpService: HttpService,  private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.loadCategories();
+    this.subscription = refreshCategoriesObservable.subscribe(() => this.loadCategories());
+
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   public openAddModal(): void {

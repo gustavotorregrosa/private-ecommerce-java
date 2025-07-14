@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import { ConfigService } from "./config";
 import { ISocketMessage, ISocketTopic } from "../interfaces/ISocketMessage";
+import { ToastService } from "./toast";
+import { refreshCategoriesObservable } from "../misc/observables";
 
 @Injectable({
   providedIn: 'root'
@@ -15,13 +17,27 @@ export class SocketService {
     
     }[] = []
 
-    constructor(private configService: ConfigService) {
+    constructor(private configService: ConfigService, private toastService: ToastService) {
 
         this.socketEvents.push({
             topic: ISocketTopic.SET_SESSION_ID,
             fn: (message: ISocketMessage) => {
                 this.sessionId = message.sessionId;
                 console.log('Session ID set:', message.sessionId);
+            }}
+        )
+
+        this.socketEvents.push({
+            topic: ISocketTopic.NEW_LOGIN,
+            fn: (message: ISocketMessage) => {
+                this.toastService.showSuccess(message.message);
+            }}
+        )
+        
+        this.socketEvents.push({
+            topic: ISocketTopic.REFRESH_CATEGORIES,
+            fn: (message: ISocketMessage) => {
+                refreshCategoriesObservable.next();
             }}
         )
 
@@ -38,16 +54,16 @@ export class SocketService {
 
         this.socket.onopen = () => {
            
-            const dummyMessage: ISocketMessage = {
-                topic: ISocketTopic.SET_SESSION_ID,
-                sessionId: this.sessionId || '123',
-                message: 'ola mundoo...'
-            }
+            // const dummyMessage: ISocketMessage = {
+            //     topic: ISocketTopic.SET_SESSION_ID,
+            //     sessionId: this.sessionId || '123',
+            //     message: 'ola mundoo...'
+            // }
 
-            setTimeout(() => {
-                console.log('WebSocket connected:', url);
-                this.send(JSON.stringify(dummyMessage));
-            }, 4000);
+            // setTimeout(() => {
+            //     console.log('WebSocket connected:', url);
+            //     this.send(JSON.stringify(dummyMessage));
+            // }, 4000);
 
             this.socket!.onmessage = ({data}) => {
                 console.log({data})

@@ -112,9 +112,7 @@ public class AuthenticationService {
         String refreshToken = generateJwtToken(userBase, true);
         LoginResponseDTO loginResponse = new LoginResponseDTO(token, refreshToken, userBase);
 
-
         return loginResponse;
-
     }
 
     public UserBaseDTO getUserFromToken(String token) {

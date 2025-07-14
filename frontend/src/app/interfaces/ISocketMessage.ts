@@ -1,5 +1,7 @@
 export enum ISocketTopic {
     SET_SESSION_ID = 'set-session-id',
+    NEW_LOGIN = 'new-login',
+    REFRESH_CATEGORIES = 'refresh-categories',
     MESSAGE = 'message',
     ERROR = 'error'
 }

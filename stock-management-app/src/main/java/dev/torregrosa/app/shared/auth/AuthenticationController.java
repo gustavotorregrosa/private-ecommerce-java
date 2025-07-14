@@ -58,7 +58,7 @@ public class AuthenticationController {
             LoginResponseDTO loginResponseData = authenticationService.authenticate(loginDTORequest.getEmail(), loginDTORequest.getPassword());
             response.data = loginResponseData;
 
-            webSocketHandler.sendToRedis(new WebSocketMessageTemplate("new user " + loginDTORequest.getEmail(), socketSessionID, "new-login"));
+            webSocketHandler.sendToRedis(new WebSocketMessageTemplate("User " + response.data.user.name + " just logged in" , socketSessionID, "new-login"));
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
