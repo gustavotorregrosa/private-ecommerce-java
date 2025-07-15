@@ -21,5 +21,4 @@ public class AuthenticationContext {
         this.currentUser = currentUser;
     }
 
-    
 }

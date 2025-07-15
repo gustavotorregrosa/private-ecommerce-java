@@ -41,6 +41,7 @@ public class CategoryService implements IService<CategoryBaseDTO, UUID> {
     @Override
     public Iterable<CategoryBaseDTO> findAll() {
         return categoryRepository.findAll().stream()
+                .sorted((c1, c2) -> c1.getName().compareToIgnoreCase(c2.getName()))
                 .map(category -> {
                     CategoryBaseDTO dto = new CategoryBaseDTO();
                     dto.id = category.getId();

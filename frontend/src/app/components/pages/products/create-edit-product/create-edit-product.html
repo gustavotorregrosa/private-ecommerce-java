@@ -1,0 +1,17 @@
+<div>
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input [(ngModel)]="name" matInput placeholder="Name">
+      <mat-hint>Product name</mat-hint>
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Category ID</mat-label>
+      <input [(ngModel)]="categoryId" matInput placeholder="Category ID">
+      <mat-hint>Category ID</mat-hint>
+    </mat-form-field>
+  </p>
+  <button (click)="saveProduct()" matButton="elevated">{{action}}</button>
+</div>

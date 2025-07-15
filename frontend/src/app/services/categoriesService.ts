@@ -28,11 +28,11 @@ export class CategoriesService {
     }
     
     public async update(category: ICategory): Promise<ICategory> {
-        const response = await this.httpService.put<ICategory>(`/categories/${category.id}`, category as any);
+        const response = await this.httpService.put<ICategory>(`${this.endpoint}/${category.id}`, category as any);
         return response;
     }
     
     public async delete(categoryId: string): Promise<void> {
-        await this.httpService.delete(`/categories/${categoryId}`);
+        await this.httpService.delete(`${this.endpoint}/${categoryId}`);
     }
 }

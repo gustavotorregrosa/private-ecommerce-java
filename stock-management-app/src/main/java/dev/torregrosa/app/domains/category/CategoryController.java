@@ -135,8 +135,6 @@ public class CategoryController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         
-        
-    
     }
 
     @DeleteMapping("/{id}")
@@ -157,6 +155,7 @@ public class CategoryController {
 
         try {
             categoryService.deleteById(id);
+            webSocketHandler.sendToRedis(new WebSocketMessageTemplate(null , null, "refresh-categories"));
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.errorMessage = "Error deleting category: " + e.getMessage();

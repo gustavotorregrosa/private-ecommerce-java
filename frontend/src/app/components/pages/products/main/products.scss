@@ -18,26 +18,24 @@ section {
   align-items: center;
 }
 
-
-.actions-col{
+.actions-col {
   width: 60px;
   text-align: center;
 }
 
-mat-card{
+mat-card {
   padding: 2em;
 }
 
-.float-right{
+.float-right {
   justify-content: end;
 }
 
-#add-button{
+#add-button {
   float: right;
-  
 }
 
-mat-card{
+mat-card {
   max-height: calc(100vh - 200px);
   overflow-y: auto;
 }
