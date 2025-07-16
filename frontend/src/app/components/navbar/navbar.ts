@@ -31,6 +31,10 @@ export class Navbar {
     this.router.navigate(['/categories']);
   }
 
+  public navigateToProducts(){
+    this.router.navigate(['/products']);
+  }
+
   public logout() {
     this.authService.setUser(null);
     this.router.navigate(['/']);

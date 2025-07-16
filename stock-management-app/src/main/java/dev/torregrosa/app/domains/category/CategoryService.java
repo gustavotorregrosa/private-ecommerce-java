@@ -56,5 +56,4 @@ public class CategoryService implements IService<CategoryBaseDTO, UUID> {
         categoryRepository.deleteById(id);
     }
 
-
 }

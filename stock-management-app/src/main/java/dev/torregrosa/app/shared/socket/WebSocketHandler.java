@@ -49,6 +49,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     break;
 
                 case "refresh-categories":
+                case "refresh-products":
                     for (WebSocketSession session : sessions.values()) {
                         WebSocketMessageTemplate message = WebSocketMessageTemplate.fromJson(messageFromRedis);
                         session.sendMessage(new TextMessage(message.toString()));
