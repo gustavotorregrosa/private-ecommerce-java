@@ -8,7 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateEditProduct } from '../create-edit-product/create-edit-product';
 import { DeleteProduct } from '../delete-product/delete-product';
-import { refreshProductsObservable } from '../../../../misc/observables';
+// import { refreshProductsObservable } from '../../../../misc/observables';
 import { Subscription } from 'rxjs';
 
 export interface IModalData {
@@ -31,8 +31,8 @@ export class Products implements OnInit, OnDestroy {
   constructor(private productsService: ProductsService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.loadProducts();
-    this.subscription = refreshProductsObservable.subscribe(() => this.loadProducts());
+    // this.loadProducts();
+    // this.subscription = refreshProductsObservable.subscribe(() => this.loadProducts());
   }
 
   ngOnDestroy(): void {

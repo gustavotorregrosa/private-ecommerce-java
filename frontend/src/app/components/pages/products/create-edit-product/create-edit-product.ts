@@ -1,12 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { IModalData } from '../main/products';
 import { ProductsService } from '../../../../services/productsService';
 import { IProduct } from '../../../../interfaces/IProduct';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-create-edit-product',
@@ -24,6 +24,8 @@ export class CreateEditProduct implements OnInit {
   constructor(private productsService: ProductsService, private editCreateModal: MatDialogRef<CreateEditProduct>, @Inject(MAT_DIALOG_DATA) private modalData: IModalData) {}
 
   public ngOnInit(): void {
+    console.log('foi...')
+
     if (this.modalData && this.modalData.product) {
       this.action = 'Save';
       this.name = this.modalData.product.name || '';
