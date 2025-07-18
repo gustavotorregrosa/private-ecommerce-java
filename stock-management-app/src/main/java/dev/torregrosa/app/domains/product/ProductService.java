@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import dev.torregrosa.app.domains.category.Category;
+import dev.torregrosa.app.domains.category.CategoryBaseDTO;
 import dev.torregrosa.app.domains.category.CategoryService;
 import dev.torregrosa.app.shared.IService;
 
@@ -41,22 +43,47 @@ public class ProductService implements IService<ProductBaseDTO, UUID> {
     @Override
     public ProductBaseDTO findById(UUID id) {
         return productRepository.findById(id)
-                .map(product -> new ProductBaseDTO(
+                .map(product -> {
+
+                   ProductBaseDTO productDTO = new ProductBaseDTO(
                         product.getId(),
                         product.getName(),
-                        product.getDescription(),
-                        product.getCategory() != null ? product.getCategory().getId() : null))
+                        product.getDescription()
+                    );
+
+                    Category category = product.getCategory();
+
+                    if(category != null){
+                        CategoryBaseDTO categoryBaseDTO = new CategoryBaseDTO(category.getId(), category.getName());
+                        productDTO.setCategory(categoryBaseDTO);
+                    }
+
+                    return productDTO;
+
+                })
                 .orElse(null);
     }
 
     @Override
     public Iterable<ProductBaseDTO> findAll() {
         return productRepository.findAll().stream()
-                .map(product -> new ProductBaseDTO(
+                .map(product -> {
+
+                    ProductBaseDTO productDTO = new ProductBaseDTO(
                         product.getId(),
                         product.getName(),
-                        product.getDescription(),
-                        product.getCategory() != null ? product.getCategory().getId() : null))
+                        product.getDescription()
+                    );
+
+                    Category category = product.getCategory();
+
+                    if(category != null){
+                        CategoryBaseDTO categoryBaseDTO = new CategoryBaseDTO(category.getId(), category.getName());
+                        productDTO.setCategory(categoryBaseDTO);
+                    }
+
+                    return productDTO;
+                })
                 .toList();
     }
 
