@@ -12,6 +12,14 @@ export class ProductsService {
 
     private endpoint: string = '/products';
 
+    private mapToDTO(product: IProduct): any {
+        return {
+            id: product.id,
+            name: product.name,
+            categoryId: product.category.id 
+        };
+    }
+
     public async getAll(): Promise<IProduct[]> {
         const response = await this.httpService.get<IProduct[]>(this.endpoint);
         return response;
@@ -23,12 +31,12 @@ export class ProductsService {
     }
 
     public async create(product: IProduct): Promise<IProduct> {
-        const response = await this.httpService.post<IProduct>(this.endpoint, product as any);
+        const response = await this.httpService.post<IProduct>(this.endpoint, this.mapToDTO(product));
         return response;
     }
     
     public async update(product: IProduct): Promise<IProduct> {
-        const response = await this.httpService.put<IProduct>(`${this.endpoint}/${product.id}`, product as any);
+        const response = await this.httpService.put<IProduct>(`${this.endpoint}/${product.id}`, this.mapToDTO(product));
         return response;
     }
     

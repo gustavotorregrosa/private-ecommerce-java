@@ -37,7 +37,6 @@ public class UserService {
         }
 
         return new UserWithHashDTO(user.getId(), user.getName(), user.getEmail(), user.getPasswordHash());
-
      }
 
   

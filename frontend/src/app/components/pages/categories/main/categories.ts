@@ -30,7 +30,7 @@ export class Categories implements OnInit, OnDestroy {
   displayedColumns: string[] = ['name', 'actions']; 
   private subscription: Subscription | null = null;
 
-  constructor(private httpService: HttpService,  private dialog: MatDialog) {}
+  constructor(private httpService: HttpService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.loadCategories();
@@ -65,7 +65,6 @@ export class Categories implements OnInit, OnDestroy {
   }
 
   public openDeleteModal(category: ICategory): void {
-    console.log('Deleting category:', category);
     const dialogDeleteRef = this.dialog.open(DeleteCategory, {
       width: '400px',
       data: { category } as IModalData

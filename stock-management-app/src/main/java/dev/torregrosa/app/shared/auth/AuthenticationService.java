@@ -65,9 +65,9 @@ public class AuthenticationService {
     }
 
     public void register(UserCreateDTO userCreateDTO) {
-        if (userService.getUserWithHashDTO(userCreateDTO.email) != null) {
-            throw new IllegalArgumentException("User already exists");
-        }
+        // if (userService.getUserWithHashDTO(userCreateDTO.email) != null) {
+        //     throw new IllegalArgumentException("User already exists");
+        // }
 
         userService.createUser(userCreateDTO);
     }

@@ -10,6 +10,9 @@ import { CreateEditProduct } from '../create-edit-product/create-edit-product';
 import { DeleteProduct } from '../delete-product/delete-product';
 // import { refreshProductsObservable } from '../../../../misc/observables';
 import { Subscription } from 'rxjs';
+import { IResponse } from '../../../../interfaces/IResponse';
+import { ICategory } from '../../../../interfaces/ICategory';
+import { HttpService } from '../../../../services/httpService';
 
 export interface IModalData {
   action: 'create' | 'edit';
@@ -28,10 +31,10 @@ export class Products implements OnInit, OnDestroy {
   displayedColumns: string[] = ['name', 'category', 'actions'];
   private subscription: Subscription | null = null;
 
-  constructor(private productsService: ProductsService, private dialog: MatDialog) {}
+  constructor(private httpService: HttpService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
-    // this.loadProducts();
+    this.loadProducts();
     // this.subscription = refreshProductsObservable.subscribe(() => this.loadProducts());
   }
 
@@ -56,7 +59,9 @@ export class Products implements OnInit, OnDestroy {
   }
 
   private async loadProducts(): Promise<void> {
-    this.products = await this.productsService.getAll();
+    const _products: IProduct[] = (await this.httpService.get<IResponse<IProduct[]>>('/products')).data
+    this.products = _products;
+
   }
 
   public openDeleteModal(product: IProduct): void {

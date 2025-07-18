@@ -36,7 +36,6 @@ export class CreateEditCategory implements OnInit {
 
     public async saveCategory(): Promise<void> {
       if (!this.name.trim()) {
-        console.error('Category name cannot be empty');
         return;
       }
 

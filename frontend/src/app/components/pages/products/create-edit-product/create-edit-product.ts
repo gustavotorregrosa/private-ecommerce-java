@@ -30,20 +30,22 @@ export class CreateEditProduct implements OnInit {
       this.action = 'Save';
       this.name = this.modalData.product.name || '';
       this.categoryId = this.modalData.product.category.id || '';
+     
       this.id = this.modalData.product.id || null;
     } else {
       this.action = 'Create';
       this.id = null;
       this.name = '';
       this.categoryId = '';
+      this.categoryId = '501b632a-6b22-49a9-aeda-6cf572d12491'
     }
   }
 
   public async saveProduct(): Promise<void> {
-    if (!this.name.trim() || !this.categoryId.trim()) {
-      console.error('Product name and category cannot be empty');
-      return;
-    }
+    // if (!this.name.trim() || !this.categoryId.trim()) {
+    //   console.error('Product name and category cannot be empty');
+    //   return;
+    // }
 
     if (this.action === 'Create') {
       await this.productsService.create({ name: this.name, category: { id: this.categoryId } } as IProduct);
