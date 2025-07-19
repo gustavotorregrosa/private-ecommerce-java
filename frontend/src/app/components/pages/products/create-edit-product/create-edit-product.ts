@@ -7,10 +7,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { ICategory } from '../../../../interfaces/ICategory';
+import { CategoriesService } from '../../../../services/categoriesService';
+import { Subscription } from 'rxjs';
+import { refreshCategoriesObservable } from '../../../../misc/observables';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-create-edit-product',
-  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, FormsModule, MatDialogModule],
+  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, FormsModule, MatDialogModule, MatSelectModule, CommonModule],
   templateUrl: './create-edit-product.html',
   styleUrl: './create-edit-product.scss'
 })
@@ -21,23 +28,38 @@ export class CreateEditProduct implements OnInit {
   public name: string = '';
   public categoryId: string = '';
 
-  constructor(private productsService: ProductsService, private editCreateModal: MatDialogRef<CreateEditProduct>, @Inject(MAT_DIALOG_DATA) private modalData: IModalData) {}
+  public categories: ICategory[] = [];
+  private subscription: Subscription | null = null;
+
+  constructor(private categoriesService: CategoriesService, private productsService: ProductsService, private editCreateModal: MatDialogRef<CreateEditProduct>, @Inject(MAT_DIALOG_DATA) private modalData: IModalData) {}
+
+  private async loadCategories(): Promise<void> {
+    const _categories: ICategory[] = await this.categoriesService.getAll();
+    this.categories = _categories;
+  }
 
   public ngOnInit(): void {
-    console.log('foi...')
+   
+    this.loadCategories();
+    this.subscription = refreshCategoriesObservable.subscribe(() => this.loadCategories());
+    console.log('Modal data:', this.modalData);
 
     if (this.modalData && this.modalData.product) {
-      this.action = 'Save';
-      this.name = this.modalData.product.name || '';
-      this.categoryId = this.modalData.product.category.id || '';
-     
-      this.id = this.modalData.product.id || null;
+        this.action = 'Save';
+        this.name = this.modalData.product.name || '';
+        this.categoryId = this.modalData.product.category.id || '';
+        this.id = this.modalData.product.id || null;
     } else {
-      this.action = 'Create';
-      this.id = null;
-      this.name = '';
-      this.categoryId = '';
-      this.categoryId = '501b632a-6b22-49a9-aeda-6cf572d12491'
+        this.action = 'Create';
+        this.id = null;
+        this.name = '';
+        this.categoryId = '';
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 

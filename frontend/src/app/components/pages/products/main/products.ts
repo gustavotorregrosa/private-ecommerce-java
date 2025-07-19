@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 import { IResponse } from '../../../../interfaces/IResponse';
 import { ICategory } from '../../../../interfaces/ICategory';
 import { HttpService } from '../../../../services/httpService';
+import { refreshProductsObservable } from '../../../../misc/observables';
 
 export interface IModalData {
   action: 'create' | 'edit';
@@ -35,7 +36,7 @@ export class Products implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadProducts();
-    // this.subscription = refreshProductsObservable.subscribe(() => this.loadProducts());
+    this.subscription = refreshProductsObservable.subscribe(() => this.loadProducts());
   }
 
   ngOnDestroy(): void {

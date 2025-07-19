@@ -127,6 +127,7 @@ public class CategoryController {
             category = categoryService.save(category);
             response.data = category;
 
+            webSocketHandler.sendToRedis(new WebSocketMessageTemplate(null , null, "refresh-products"));
             webSocketHandler.sendToRedis(new WebSocketMessageTemplate(null , null, "refresh-categories"));
             return ResponseEntity.ok(response);
 

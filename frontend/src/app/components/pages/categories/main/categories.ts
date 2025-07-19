@@ -11,6 +11,7 @@ import { CreateEditCategory } from '../create-edit-category/create-edit-category
 import { DeleteCategory } from '../delete-category/delete-category';
 import { refreshCategoriesObservable } from '../../../../misc/observables';
 import { Subscription } from 'rxjs';
+import { CategoriesService } from '../../../../services/categoriesService';
 
 
 export interface IModalData {
@@ -30,7 +31,7 @@ export class Categories implements OnInit, OnDestroy {
   displayedColumns: string[] = ['name', 'actions']; 
   private subscription: Subscription | null = null;
 
-  constructor(private httpService: HttpService, private dialog: MatDialog) {}
+  constructor(private httpService: HttpService, private dialog: MatDialog, private categoriesService: CategoriesService) {}
 
   ngOnInit(): void {
     this.loadCategories();
@@ -59,9 +60,8 @@ export class Categories implements OnInit, OnDestroy {
   }
 
   private async loadCategories(): Promise<void> {
-    const _categories: ICategory[] = (await this.httpService.get<IResponse<ICategory[]>>('/categories')).data
+    const _categories: ICategory[] = await this.categoriesService.getAll();
     this.categories = _categories;
-
   }
 
   public openDeleteModal(category: ICategory): void {

@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpService } from "./httpService";
 import { IProduct } from "../interfaces/IProduct";
+import { IResponse } from "../interfaces/IResponse";
 
 
 @Injectable({
@@ -21,23 +22,23 @@ export class ProductsService {
     }
 
     public async getAll(): Promise<IProduct[]> {
-        const response = await this.httpService.get<IProduct[]>(this.endpoint);
-        return response;
+        const response = await this.httpService.get<IResponse<IProduct[]>>(this.endpoint);
+        return response.data;
     }
 
     public async getById(productId: string): Promise<IProduct> {
-        const response = await this.httpService.get<IProduct>(`${this.endpoint}/${productId}`);
-        return response;
+        const response = await this.httpService.get<IResponse<IProduct>>(`${this.endpoint}/${productId}`);
+        return response.data;
     }
 
     public async create(product: IProduct): Promise<IProduct> {
-        const response = await this.httpService.post<IProduct>(this.endpoint, this.mapToDTO(product));
-        return response;
+        const response = await this.httpService.post<IResponse<IProduct>>(this.endpoint, this.mapToDTO(product));
+        return response.data;
     }
     
     public async update(product: IProduct): Promise<IProduct> {
-        const response = await this.httpService.put<IProduct>(`${this.endpoint}/${product.id}`, this.mapToDTO(product));
-        return response;
+        const response = await this.httpService.put<IResponse<IProduct>>(`${this.endpoint}/${product.id}`, this.mapToDTO(product));
+        return response.data;
     }
     
     public async delete(productId: string): Promise<void> {

@@ -19,7 +19,7 @@ export class CreateEditCategory implements OnInit {
     public id: string | null = null;
     public action: 'Create' | 'Save' = 'Create';
     public name: string = '';
-
+ 
     constructor(private categoriesService: CategoriesService,  private editCreateModal: MatDialogRef<CreateEditCategory>, @Inject(MAT_DIALOG_DATA) private modalData: IModalData) {}
     
     public ngOnInit(): void {
