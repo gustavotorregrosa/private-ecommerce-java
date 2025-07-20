@@ -10,9 +10,15 @@ import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 @Configuration
 public class RedisConfig {
 
+    @org.springframework.beans.factory.annotation.Value("${spring.redis.host}")
+    private String redisHost;
+
+    @org.springframework.beans.factory.annotation.Value("${spring.redis.port}")
+    private int redisPort;
+
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        return new org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory();
+        return new org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory(redisHost, redisPort);
     }
 
     @Bean
