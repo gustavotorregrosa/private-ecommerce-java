@@ -43,8 +43,8 @@ services:
       - "3100:4200"
     # depends_on:
     #   - stock-management-app
-    networks:
-      - ecommerce-net-java
+    # networks:
+    #   - ecommerce-net-java
 
 networks:
   ecommerce-net-java:
