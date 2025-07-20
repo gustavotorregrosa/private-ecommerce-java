@@ -4,7 +4,7 @@ export const development = {
     // socketUrl: 'http://localhost:8090/ws',
     // authUrl: 'http://localhost:3100/auth',
 
-    authUrl: 'https://dunder-mifflin.gustavo.torregrosa/auth',
+    authUrl: 'https://dunder-mifflin-co.gustavo.torregrosa.dev/auth',
 
     apiUrl: 'https://api.dunder-mifflin.gustavo.torregrosa.dev',
     socketUrl: 'https://api.dunder-mifflin.gustavo.torregrosa.dev/ws',

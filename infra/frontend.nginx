@@ -1,6 +1,6 @@
 server {
     listen 80;
-    server_name dunder-mifflin.gustavo.torregrosa.dev;
+    server_name dunder-mifflin-co.torregrosa.dev;
 
     location / {
         proxy_pass http://localhost:3100;
