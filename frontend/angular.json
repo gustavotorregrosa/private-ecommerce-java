@@ -67,6 +67,9 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "allowedHosts": ["https://dunder-mifflin.gustavo.torregrosa.dev/"]
+          },
           "configurations": {
             "production": {
               "buildTarget": "frontend:build:production"
