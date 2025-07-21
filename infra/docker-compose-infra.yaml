@@ -13,7 +13,7 @@ services:
     networks:
       - ecommerce-net-java
 
-  redis:
+  redisjava:
     image: redis:latest
     container_name: redis-server-java
     ports:
