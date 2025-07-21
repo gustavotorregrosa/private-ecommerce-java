@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  stock-management-app:
+    build:
+      context: ../stock-management-app
+      dockerfile: dockerfile
+    container_name: stock-management-app
+    ports:
+      - "8090:8080"
+    networks:
+      - ecommerce-net-java
+
+networks:
+  ecommerce-net-java:
+    external: true

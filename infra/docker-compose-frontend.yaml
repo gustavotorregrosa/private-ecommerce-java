@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: dockerfile
+    container_name: frontend-app
+    ports:
+      - "3100:4200"
