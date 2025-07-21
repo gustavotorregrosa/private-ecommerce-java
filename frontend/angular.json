@@ -68,7 +68,7 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
-            "allowedHosts": ["https://dunder-mifflin.gustavo.torregrosa.dev/"]
+            "allowedHosts": ["dunder-mifflin.gustavo.torregrosa.dev", "localhost"]
           },
           "configurations": {
             "production": {
