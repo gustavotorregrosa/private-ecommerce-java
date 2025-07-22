@@ -14,6 +14,7 @@ import { IResponse } from '../../../../interfaces/IResponse';
 import { ICategory } from '../../../../interfaces/ICategory';
 import { HttpService } from '../../../../services/httpService';
 import { refreshProductsObservable } from '../../../../misc/observables';
+ import { ActivatedRoute } from '@angular/router';
 
 export interface IModalData {
   action: 'create' | 'edit';
@@ -31,12 +32,27 @@ export class Products implements OnInit, OnDestroy {
   public products: IProduct[] = [];
   displayedColumns: string[] = ['name', 'category', 'actions'];
   private subscription: Subscription | null = null;
+  private categoryId: string | null = null;
 
-  constructor(private httpService: HttpService, private dialog: MatDialog) {}
+  private loadItems: () => Promise<void> = async () => {}
+
+  constructor(private httpService: HttpService, private dialog: MatDialog, private route: ActivatedRoute, private productsService: ProductsService) {}
 
   ngOnInit(): void {
-    this.loadProducts();
-    this.subscription = refreshProductsObservable.subscribe(() => this.loadProducts());
+    
+    this.categoryId = this.route.snapshot.params['categoryId'];
+    if(this.categoryId) {
+      this.loadItems = async () => {
+        this.products = await this.productsService.getAll();
+      }
+    } else {
+      this.loadItems = async () => {
+        this.products = await this.productsService.getAll();
+      }
+    }
+
+    this.loadItems();
+    this.subscription = refreshProductsObservable.subscribe(() => this.loadItems());
   }
 
   ngOnDestroy(): void {

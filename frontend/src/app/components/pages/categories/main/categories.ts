@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import { CategoriesService } from '../../../../services/categoriesService';
 import { AuthService } from '../../../../services/auth';
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 
 export interface IModalData {
@@ -35,7 +36,7 @@ export class Categories implements OnInit, OnDestroy {
 
   private router = inject(Router);
 
-  constructor(private httpService: HttpService, private dialog: MatDialog, private categoriesService: CategoriesService) {}
+  constructor(private route: ActivatedRoute, private httpService: HttpService, private dialog: MatDialog, private categoriesService: CategoriesService) {}
 
   ngOnInit(): void {
     this.loadCategories();
@@ -51,7 +52,7 @@ export class Categories implements OnInit, OnDestroy {
 
   public showCategoryProducts(category: ICategory){
     console.log({category})
-    this.router.navigate(['/categories', category.id])
+    this.router.navigate(['/products', 'category', category.id])
 
   }
 
