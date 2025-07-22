@@ -64,6 +64,29 @@ public class ProductService implements IService<ProductBaseDTO, UUID> {
                 .orElse(null);
     }
 
+
+    public Iterable<ProductBaseDTO> findAllByCategory(UUID categoryId) {
+        return productRepository.findByCategoryId(categoryId).stream()
+                .map(product -> {
+                    ProductBaseDTO productDTO = new ProductBaseDTO(
+                        product.getId(),
+                        product.getName(),
+                        product.getDescription()
+                    );
+
+                    Category category = product.getCategory();
+
+                    if(category != null){
+                        CategoryBaseDTO categoryBaseDTO = new CategoryBaseDTO(category.getId(), category.getName());
+                        productDTO.setCategory(categoryBaseDTO);
+                    }
+
+                    return productDTO;
+                })
+                .toList();
+        
+    }
+
     @Override
     public Iterable<ProductBaseDTO> findAll() {
         return productRepository.findAll().stream()

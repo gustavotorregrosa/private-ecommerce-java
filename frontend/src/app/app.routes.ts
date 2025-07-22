@@ -17,10 +17,17 @@ export const routes: Routes = [
       canActivate: [isAuthGuard]
     },
 
+     {
+      path: 'products/category/:categoryId',
+      component: Products,
+      canActivate: [isAuthGuard]
+    },
+
     {
       path: 'products',
       component: Products,
       canActivate: [isAuthGuard]
-    }
+    },
+
 
 ];

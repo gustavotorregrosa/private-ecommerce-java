@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { HttpService } from '../../../../services/httpService';
 import { ICategory } from '../../../../interfaces/ICategory';
 import { IResponse } from '../../../../interfaces/IResponse';
@@ -12,6 +12,8 @@ import { DeleteCategory } from '../delete-category/delete-category';
 import { refreshCategoriesObservable } from '../../../../misc/observables';
 import { Subscription } from 'rxjs';
 import { CategoriesService } from '../../../../services/categoriesService';
+import { AuthService } from '../../../../services/auth';
+import { Router } from '@angular/router';
 
 
 export interface IModalData {
@@ -31,6 +33,8 @@ export class Categories implements OnInit, OnDestroy {
   displayedColumns: string[] = ['name', 'actions']; 
   private subscription: Subscription | null = null;
 
+  private router = inject(Router);
+
   constructor(private httpService: HttpService, private dialog: MatDialog, private categoriesService: CategoriesService) {}
 
   ngOnInit(): void {
@@ -43,6 +47,12 @@ export class Categories implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  public showCategoryProducts(category: ICategory){
+    console.log({category})
+    this.router.navigate(['/categories', category.id])
+
   }
 
   public openAddModal(): void {

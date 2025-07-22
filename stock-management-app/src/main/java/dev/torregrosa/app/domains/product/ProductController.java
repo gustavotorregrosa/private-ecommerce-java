@@ -40,6 +40,19 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/category/{categoryID}")
+    public ResponseEntity<HttpCustomResponse<Iterable<ProductBaseDTO>>> getProductsByCategory(@PathVariable UUID categoryID) {
+        HttpCustomResponse<Iterable<ProductBaseDTO>> response = new HttpCustomResponse<>();
+        try {
+            response.data = productService.findAllByCategory(categoryID);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.errorMessage = e.getMessage();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+
     @GetMapping("/{id}")
     public ResponseEntity<HttpCustomResponse<ProductBaseDTO>> getProductById(@PathVariable UUID id) {
         HttpCustomResponse<ProductBaseDTO> response = new HttpCustomResponse<>();
