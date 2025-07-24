@@ -1,8 +1,10 @@
 package dev.torregrosa.app.domains.product;
 
+import java.util.List;
 import java.util.UUID;
 
 import dev.torregrosa.app.domains.category.Category;
+import dev.torregrosa.app.domains.movimentation.Movimentation;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,6 +32,9 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @OneToMany(mappedBy = "product")
+    private List<Movimentation> movimentations;
 
     public UUID getId() {
         return id;

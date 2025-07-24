@@ -40,6 +40,11 @@ export class ProductsService {
         const response = await this.httpService.put<IResponse<IProduct>>(`${this.endpoint}/${product.id}`, this.mapToDTO(product));
         return response.data;
     }
+
+    public async getByCategoryId(categoryId: string): Promise<IProduct[]> {
+        const response = await this.httpService.get<IResponse<IProduct[]>>(`${this.endpoint}/category/${categoryId}`);
+        return response.data;
+    }
     
     public async delete(productId: string): Promise<void> {
         await this.httpService.delete(`${this.endpoint}/${productId}`);

@@ -41,13 +41,16 @@ export class Products implements OnInit, OnDestroy {
   ngOnInit(): void {
     
     this.categoryId = this.route.snapshot.params['categoryId'];
-    if(this.categoryId) {
+
+    console.log('Category ID:', this.categoryId);
+
+    if(!this.categoryId) {
       this.loadItems = async () => {
         this.products = await this.productsService.getAll();
       }
     } else {
       this.loadItems = async () => {
-        this.products = await this.productsService.getAll();
+        this.products = await this.productsService.getByCategoryId(this.categoryId!);
       }
     }
 

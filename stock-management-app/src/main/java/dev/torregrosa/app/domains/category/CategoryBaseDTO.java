@@ -16,7 +16,6 @@ public class CategoryBaseDTO {
         this.name = name;
     }
 
-    
     public Category toEntity(){
         Category category = new Category();
         category.setId(this.id);
