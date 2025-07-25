@@ -2,14 +2,17 @@ package dev.torregrosa.app.domains.movimentation;
 
 import java.util.UUID;
 
-public class MovimentationService {
-    
+import dev.torregrosa.app.shared.IService;
+
+public class MovimentationService implements IService<MovimentationBaseDTO, UUID> {
+
     private final IMovimentationRepository movimentationRepository;
 
     public MovimentationService(IMovimentationRepository movimentationRepository) {
         this.movimentationRepository = movimentationRepository;
     }
 
+    @Override
     public MovimentationBaseDTO save(MovimentationBaseDTO movimentationBaseDTO) {
         Movimentation movimentation = movimentationBaseDTO.toEntity();
         movimentation = movimentationRepository.save(movimentation);
@@ -18,17 +21,52 @@ public class MovimentationService {
         return movimentationBaseDTO;
     }
 
+    @Override
     public MovimentationBaseDTO findById(UUID id) {
         return movimentationRepository.findById(id)
                 .map(movimentation -> {
                     MovimentationBaseDTO dto = new MovimentationBaseDTO();
                     dto.id = movimentation.getId();
-                    dto.productId = movimentation.getProductId().toString();
+                    dto.productId = movimentation.getProduct().getId().toString();
                     dto.quantity = movimentation.getQuantity();
                     dto.createdAt = movimentation.getCreatedAt();
                     return dto;
                 })
                 .orElse(null);
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        movimentationRepository.deleteById(id);
+    }
+
+
+    @Override
+    public Iterable<MovimentationBaseDTO> findAll() {
+        return movimentationRepository.findAll()
+                .stream()
+                .map(movimentation -> {
+                    MovimentationBaseDTO dto = new MovimentationBaseDTO();
+                    dto.id = movimentation.getId();
+                    dto.productId = movimentation.getProduct().getId().toString();
+                    dto.quantity = movimentation.getQuantity();
+                    dto.createdAt = movimentation.getCreatedAt();
+                    return dto;
+                })
+                .toList();
+    }
+
+    public Iterable<MovimentationBaseDTO> findAllByProductId(UUID productId) {
+        return movimentationRepository.findByProductId(productId).stream()
+                .map(movimentation -> {
+                    MovimentationBaseDTO dto = new MovimentationBaseDTO();
+                    dto.id = movimentation.getId();
+                    dto.productId = movimentation.getProduct().getId().toString();
+                    dto.quantity = movimentation.getQuantity();
+                    dto.createdAt = movimentation.getCreatedAt();
+                    return dto;
+                })
+                .toList();
     }
 
 }
