@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ProductsService } from '../../../../services/productsService';
 import { IProduct } from '../../../../interfaces/IProduct';
 import { MatTableModule } from '@angular/material/table';
@@ -14,7 +14,7 @@ import { IResponse } from '../../../../interfaces/IResponse';
 import { ICategory } from '../../../../interfaces/ICategory';
 import { HttpService } from '../../../../services/httpService';
 import { refreshProductsObservable } from '../../../../misc/observables';
- import { ActivatedRoute } from '@angular/router';
+ import { ActivatedRoute, Router } from '@angular/router';
 
 export interface IModalData {
   action: 'create' | 'edit';
@@ -33,6 +33,7 @@ export class Products implements OnInit, OnDestroy {
   displayedColumns: string[] = ['name', 'category', 'actions'];
   private subscription: Subscription | null = null;
   private categoryId: string | null = null;
+  private router = inject(Router);
 
   private loadItems: () => Promise<void> = async () => {}
 
@@ -41,8 +42,6 @@ export class Products implements OnInit, OnDestroy {
   ngOnInit(): void {
     
     this.categoryId = this.route.snapshot.params['categoryId'];
-
-    console.log('Category ID:', this.categoryId);
 
     if(!this.categoryId) {
       this.loadItems = async () => {
@@ -82,6 +81,11 @@ export class Products implements OnInit, OnDestroy {
     const _products: IProduct[] = (await this.httpService.get<IResponse<IProduct[]>>('/products')).data
     this.products = _products;
 
+  }
+
+  public showProductMovimentations(product: IProduct){
+    console.log({product})
+    this.router.navigate(['/movimentations', product.id])
   }
 
   public openDeleteModal(product: IProduct): void {

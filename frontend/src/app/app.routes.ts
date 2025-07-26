@@ -3,6 +3,7 @@ import { Home } from './components/pages/home/home';
 import { Categories } from './components/pages/categories/main/categories';
 import { isAuthGuard } from './misc/guards';
 import { Products } from './components/pages/products/main/products';
+import { Movimentations } from './components/pages/movimentations/main/movimentations';
 
 export const routes: Routes = [
 
@@ -28,6 +29,12 @@ export const routes: Routes = [
       component: Products,
       canActivate: [isAuthGuard]
     },
+
+    {
+      path: 'movimentations/:productId',
+      component: Movimentations,
+      canActivate: [isAuthGuard]
+    }
 
 
 ];
