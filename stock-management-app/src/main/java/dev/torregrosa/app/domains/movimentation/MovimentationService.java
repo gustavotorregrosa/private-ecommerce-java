@@ -58,15 +58,16 @@ public class MovimentationService implements IService<MovimentationBaseDTO, UUID
 
     public Iterable<MovimentationBaseDTO> findAllByProductId(UUID productId) {
         return movimentationRepository.findByProductId(productId).stream()
-                .map(movimentation -> {
-                    MovimentationBaseDTO dto = new MovimentationBaseDTO();
-                    dto.id = movimentation.getId();
-                    dto.productId = movimentation.getProduct().getId().toString();
-                    dto.quantity = movimentation.getQuantity();
-                    dto.createdAt = movimentation.getCreatedAt();
-                    return dto;
-                })
-                .toList();
+            .sorted((m1, m2) -> m1.getCreatedAt().compareTo(m2.getCreatedAt()))
+            .map(movimentation -> {
+                MovimentationBaseDTO dto = new MovimentationBaseDTO();
+                dto.id = movimentation.getId();
+                dto.productId = movimentation.getProduct().getId().toString();
+                dto.quantity = movimentation.getQuantity();
+                dto.createdAt = movimentation.getCreatedAt();
+                return dto;
+            })
+            .toList();
     }
 
 }
