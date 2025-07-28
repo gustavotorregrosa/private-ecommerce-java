@@ -19,15 +19,8 @@ export class MovimentationsService {
     }
 
     
-
     public async getStockPositionsByProductId(productId: string): Promise<IStockPosition[]> {
-
-        return [
-            { amout: 10, date: new Date('2023-01-01') },
-            { amout: 20, date: new Date('2023-01-02') },
-            { amout: -15, date: new Date('2023-01-03') },
-            { amout: 30, date: new Date('2023-01-04') },
-
-        ];
+        const response = await this.httpService.get<IResponse<IStockPosition[]>>(`${this.endpoint}/${productId}`);
+        return response.data;
     }
 }

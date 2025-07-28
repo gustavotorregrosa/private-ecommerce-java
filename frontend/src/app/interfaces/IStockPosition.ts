@@ -1,7 +1,7 @@
 export interface IStockPosition {
 
-    amout: number;
-    date: Date;
+    amount: number;
+    createdAt: Date;
 }
 
 export interface IMovimentation {

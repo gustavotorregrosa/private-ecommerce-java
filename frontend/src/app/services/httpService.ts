@@ -60,7 +60,6 @@ export class HttpService {
         }
     }
 
-
     public async put<T>(endpoint: string, body: { [key: string]: string }): Promise<T> {
 
         const url: string = this.configService.getApiURL() + endpoint;
@@ -91,7 +90,6 @@ export class HttpService {
         }
     }
 
-
     public async post<T>(endpoint: string, body:  { [key: string]: string }): Promise<T> {
 
         const url: string = this.configService.getApiURL() + endpoint;
@@ -111,7 +109,6 @@ export class HttpService {
             throw error;
         }
     }
-
 
     private makeRequest<T>(fn: (url: string, requestParams: IRequestOptions) => Observable<T>, url: string, requestParams: IRequestOptions): Promise<T> {
         return new Promise<T>((resolve, reject) => {

@@ -46,12 +46,12 @@ export class Movimentations implements OnInit, AfterViewInit {
   }
 
 
-    public openAddMovimentationModal(action: 'add' | 'withdraw'): void {
-      const dialogMovimentationRef = this.dialog.open(AddMovimentationModal, {
-        width: '400px',
-        data: { action, productId: this.productId } as IModalData
-      });
-    }
+  public openAddMovimentationModal(action: 'add' | 'withdraw'): void {
+    const dialogMovimentationRef = this.dialog.open(AddMovimentationModal, {
+      width: '400px',
+      data: { action, productId: this.productId } as IModalData
+    });
+  }
 
   private registerChart(): void {
     Chart.register(...registerables);
@@ -73,8 +73,8 @@ export class Movimentations implements OnInit, AfterViewInit {
         responsive: true,
         scales: {
           y: {
-            beginAtZero: true
-          }
+            beginAtZero: true,
+          },
         }
       }
     });
@@ -85,8 +85,8 @@ export class Movimentations implements OnInit, AfterViewInit {
       try {
         this.stockPositions = await this.movimentationsService.getStockPositionsByProductId(this.productId);
 
-        this.chart!.data.labels = this.stockPositions.map(m => m.date.toISOString().split('T')[0]);
-        this.chart!.data.datasets[0].data = this.stockPositions.map(m => m.amout);
+        this.chart!.data.labels = this.stockPositions.map(m => m.createdAt);
+        this.chart!.data.datasets[0].data = this.stockPositions.map(m => m.amount);
 
         this.chart!.update()
         console.log('Loaded stock positions:', this.stockPositions);

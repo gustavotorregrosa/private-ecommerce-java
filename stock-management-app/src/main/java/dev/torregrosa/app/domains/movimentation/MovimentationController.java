@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.torregrosa.app.shared.HttpCustomResponse;
 import dev.torregrosa.app.shared.socket.WebSocketHandler;
-import dev.torregrosa.app.shared.socket.WebSocketMessageTemplate;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/movimentations")
@@ -32,22 +31,19 @@ public class MovimentationController {
        
         HttpCustomResponse<MovimentationBaseDTO> response = new HttpCustomResponse<>();
 
-
-
-    
         System.out.println("Creating movimentation with productId: " + movimentation.productId + " and amount: " + movimentation.amount);
 
         //  MovimentationBaseDTO createdMovimentation = movimentationService.save(movimentation);
         //     response.data = createdMovimentation;
+            // return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        try {
+            MovimentationBaseDTO createdMovimentation = movimentationService.save(movimentation);
+            response.data = createdMovimentation;
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        // try {
-        //     MovimentationBaseDTO createdMovimentation = movimentationService.save(movimentation);
-        //     response.data = createdMovimentation;
-        //     return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        // } catch (Exception e) {
-        //     response.errorMessage = "Error creating movimentation: " + e.getMessage();
-        //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        // }
+        } catch (Exception e) {
+            response.errorMessage = "Error creating movimentation: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
     }
 
     @GetMapping("/{id}")
