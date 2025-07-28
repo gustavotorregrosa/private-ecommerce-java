@@ -28,7 +28,7 @@ public class MovimentationService implements IService<MovimentationBaseDTO, UUID
                     MovimentationBaseDTO dto = new MovimentationBaseDTO();
                     dto.id = movimentation.getId();
                     dto.productId = movimentation.getProduct().getId().toString();
-                    dto.quantity = movimentation.getQuantity();
+                    dto.amount = movimentation.getQuantity();
                     dto.createdAt = movimentation.getCreatedAt();
                     return dto;
                 })
@@ -49,7 +49,7 @@ public class MovimentationService implements IService<MovimentationBaseDTO, UUID
                     MovimentationBaseDTO dto = new MovimentationBaseDTO();
                     dto.id = movimentation.getId();
                     dto.productId = movimentation.getProduct().getId().toString();
-                    dto.quantity = movimentation.getQuantity();
+                    dto.amount = movimentation.getQuantity();
                     dto.createdAt = movimentation.getCreatedAt();
                     return dto;
                 })
@@ -63,7 +63,7 @@ public class MovimentationService implements IService<MovimentationBaseDTO, UUID
                 MovimentationBaseDTO dto = new MovimentationBaseDTO();
                 dto.id = movimentation.getId();
                 dto.productId = movimentation.getProduct().getId().toString();
-                dto.quantity = movimentation.getQuantity();
+                dto.amount = movimentation.getQuantity();
                 dto.createdAt = movimentation.getCreatedAt();
                 return dto;
             })

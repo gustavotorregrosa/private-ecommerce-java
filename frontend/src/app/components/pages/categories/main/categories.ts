@@ -51,9 +51,7 @@ export class Categories implements OnInit, OnDestroy {
   }
 
   public showCategoryProducts(category: ICategory){
-    console.log({category})
     this.router.navigate(['/products', 'category', category.id])
-
   }
 
   public openAddModal(): void {

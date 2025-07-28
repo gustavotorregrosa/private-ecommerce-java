@@ -9,7 +9,7 @@ public class MovimentationBaseDTO {
 
     public String productId;
 
-    public Integer quantity;
+    public Integer amount;
 
     public Instant createdAt;
 
@@ -18,12 +18,12 @@ public class MovimentationBaseDTO {
 
     public MovimentationBaseDTO(String productId, Integer quantity) {
         this.productId = productId;
-        this.quantity = quantity;
+        this.amount = quantity;
     }
 
     public Movimentation toEntity() {
         Movimentation movimentation = new Movimentation();
-        movimentation.setQuantity(this.quantity);
+        movimentation.setQuantity(this.amount);
         
         return movimentation;
     }

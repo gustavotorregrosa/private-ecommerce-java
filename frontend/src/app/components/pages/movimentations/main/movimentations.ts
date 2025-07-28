@@ -5,9 +5,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProductsService } from '../../../../services/productsService';
 import { Chart, registerables } from 'chart.js';
 import { MovimentationsService } from '../../../../services/movimentationsService';
-import { IMovimentation } from '../../../../interfaces/IMovimentation';
+import { IStockPosition } from '../../../../interfaces/IStockPosition';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { AddMovimentationModal } from '../add-movimentation/add-movimentation';
+
+
+export interface IModalData {
+  action: 'add' | 'withdraw';
+  productId: string;
+}
 
 @Component({
   selector: 'app-movimentations',
@@ -20,23 +27,31 @@ export class Movimentations implements OnInit, AfterViewInit {
   private productId: string | null = null;
   private chart: Chart | null = null;
   private ctx: HTMLCanvasElement | null = null;
-  private movimentations: IMovimentation[] = [];
+  private stockPositions: IStockPosition[] = [];
 
-  public getMovimentations(): IMovimentation[] {
-    return this.movimentations;
+  public getStockPositions(): IStockPosition[] {
+    return this.stockPositions;
   }
 
   constructor(private movimentationsService: MovimentationsService, private httpService: HttpService, private dialog: MatDialog, private route: ActivatedRoute, private productsService: ProductsService) {}
 
   ngAfterViewInit(): void {
     this.registerChart();
-    this.loadMovimentations()
+    this.loadStockPositions()
   }
 
   ngOnInit(): void {
     this.productId = this.route.snapshot.params['productId'];
     console.log('Product ID:', this.productId);
   }
+
+
+    public openAddMovimentationModal(action: 'add' | 'withdraw'): void {
+      const dialogMovimentationRef = this.dialog.open(AddMovimentationModal, {
+        width: '400px',
+        data: { action, productId: this.productId } as IModalData
+      });
+    }
 
   private registerChart(): void {
     Chart.register(...registerables);
@@ -65,21 +80,21 @@ export class Movimentations implements OnInit, AfterViewInit {
     });
   }
 
-  private async loadMovimentations(): Promise<void> {
+  private async loadStockPositions(): Promise<void> {
     if (this.productId) {
       try {
-        this.movimentations = await this.movimentationsService.getMovimentationsByProductId(this.productId);
+        this.stockPositions = await this.movimentationsService.getStockPositionsByProductId(this.productId);
 
-        this.chart!.data.labels = this.movimentations.map(m => m.date.toISOString().split('T')[0]);
-        this.chart!.data.datasets[0].data = this.movimentations.map(m => m.amout);
+        this.chart!.data.labels = this.stockPositions.map(m => m.date.toISOString().split('T')[0]);
+        this.chart!.data.datasets[0].data = this.stockPositions.map(m => m.amout);
 
         this.chart!.update()
-        console.log('Loaded movimentations:', this.movimentations); // Debugging line to check loaded movimentations
+        console.log('Loaded stock positions:', this.stockPositions);
       } catch (error) {
-        console.error('Error loading movimentations:', error);
+        console.error('Error loading stock positions:', error);
       }
     } else {
-      console.warn('No product ID provided to load movimentations.');
+      console.warn('No product ID provided to load stock positions.');
     }
   }
 

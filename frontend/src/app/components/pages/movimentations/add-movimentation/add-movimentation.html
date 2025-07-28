@@ -1,1 +1,11 @@
-<p>add-movimentation works!</p>
+<div>
+    <p>
+        <mat-form-field appearance="outline">
+            <mat-label>Amount</mat-label>
+            <input type="number" [(ngModel)]="amount" matInput placeholder="Amount">
+            <mat-hint>Transaction amount</mat-hint>
+        </mat-form-field>
+    </p>
+
+    <button matButton="elevated">{{action}}</button>
+</div>
