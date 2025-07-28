@@ -2,8 +2,11 @@ package dev.torregrosa.app.domains.movimentation;
 
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
+
 import dev.torregrosa.app.shared.IService;
 
+@Service
 public class MovimentationService implements IService<MovimentationBaseDTO, UUID> {
 
     private final IMovimentationRepository movimentationRepository;
@@ -11,7 +14,6 @@ public class MovimentationService implements IService<MovimentationBaseDTO, UUID
     public MovimentationService(IMovimentationRepository movimentationRepository) {
         this.movimentationRepository = movimentationRepository;
     }
-
     @Override
     public MovimentationBaseDTO save(MovimentationBaseDTO movimentationBaseDTO) {
         Movimentation movimentation = movimentationBaseDTO.toEntity();

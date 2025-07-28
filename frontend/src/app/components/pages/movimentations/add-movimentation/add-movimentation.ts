@@ -30,16 +30,17 @@ export class AddMovimentationModal {
     this.action = modalData.action === 'add' ? 'Add' : 'Withdraw';
   }
 
-  public addMovimentation(): void {
+  public async addMovimentation(): Promise<void> {
 
     const movimentation: IMovimentation = {
       productId: this.productID!,
       amount:  this.action == 'Add' ? this.amount : -this.amount
     };
 
-        
-
+    await this.movimentationService.addMovimentation(movimentation)
 
   }
+
+  
 
 }

@@ -6,7 +6,6 @@ import dev.torregrosa.app.domains.category.CategoryBaseDTO;
 
 public class ProductBaseDTO {
 
-     
     public ProductBaseDTO() {
     }
 

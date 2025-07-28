@@ -47,6 +47,13 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     }
                     
                     break;
+                case "refresh-movimentation":
+                    for (WebSocketSession session : sessions.values()) {
+                        WebSocketMessageTemplate message = WebSocketMessageTemplate.fromJson(messageFromRedis);
+                        System.out.println("Sending message to session: " + message.message);
+                        
+                        session.sendMessage(new TextMessage(message.toString()));
+                    }
 
                 case "refresh-categories":
                 case "refresh-products":
