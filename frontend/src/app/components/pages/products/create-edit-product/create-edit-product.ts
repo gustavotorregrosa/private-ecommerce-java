@@ -42,7 +42,6 @@ export class CreateEditProduct implements OnInit {
    
     this.loadCategories();
     this.subscription = refreshCategoriesObservable.subscribe(() => this.loadCategories());
-    console.log('Modal data:', this.modalData);
 
     if (this.modalData && this.modalData.product) {
         this.action = 'Save';

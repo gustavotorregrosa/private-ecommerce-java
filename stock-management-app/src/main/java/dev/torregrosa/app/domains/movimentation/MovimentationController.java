@@ -23,8 +23,8 @@ public class MovimentationController {
     @Autowired
     private MovimentationService movimentationService;
 
-    @Autowired
-    private WebSocketHandler webSocketHandler;
+    // @Autowired
+    // private WebSocketHandler webSocketHandler;
 
     @PostMapping
     public ResponseEntity<HttpCustomResponse<MovimentationBaseDTO>> createMovimentation(@RequestBody MovimentationBaseDTO movimentation) {

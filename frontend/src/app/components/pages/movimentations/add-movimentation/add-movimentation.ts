@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { IModalData } from '../main/movimentations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -24,7 +24,7 @@ export class AddMovimentationModal {
   public action: 'Add' | 'Withdraw' = 'Add';
   public amount: number = 0;
 
-  constructor(@Inject(MAT_DIALOG_DATA) private modalData: IModalData, private movimentationService: MovimentationsService) {
+  constructor(private addMovimentationModal: MatDialogRef<AddMovimentationModal>, @Inject(MAT_DIALOG_DATA) private modalData: IModalData, private movimentationService: MovimentationsService) {
     this.productID = modalData.productId;
     this.amount = 1;
     this.action = modalData.action === 'add' ? 'Add' : 'Withdraw';
@@ -38,6 +38,8 @@ export class AddMovimentationModal {
     };
 
     await this.movimentationService.addMovimentation(movimentation)
+
+    this.addMovimentationModal.close();
 
   }
 
