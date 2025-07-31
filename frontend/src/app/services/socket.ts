@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { ConfigService } from "./config";
 import { ISocketMessage, ISocketTopic } from "../interfaces/ISocketMessage";
 import { ToastService } from "./toast";
-import { refreshCategoriesObservable, refreshProductsObservable } from "../misc/observables";
+import { refreshCategoriesObservable, refreshMovimentationsObservable, refreshProductsObservable } from "../misc/observables";
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +45,13 @@ export class SocketService {
             topic: ISocketTopic.REFRESH_PRODUCTS,
             fn: (message: ISocketMessage) => {
                 refreshProductsObservable.next();
+            }}
+        )
+
+        this.socketEvents.push({
+            topic: ISocketTopic.REFRESH_MOVIMENTATIONS,
+            fn: (message: ISocketMessage) => {
+                refreshMovimentationsObservable.next(message.message);
             }}
         )
 

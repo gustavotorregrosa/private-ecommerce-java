@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.torregrosa.app.shared.HttpCustomResponse;
 import dev.torregrosa.app.shared.socket.WebSocketHandler;
+import dev.torregrosa.app.shared.socket.WebSocketMessageTemplate;
+
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -23,8 +25,8 @@ public class MovimentationController {
     @Autowired
     private MovimentationService movimentationService;
 
-    // @Autowired
-    // private WebSocketHandler webSocketHandler;
+    @Autowired
+    private WebSocketHandler webSocketHandler;
 
     @PostMapping
     public ResponseEntity<HttpCustomResponse<MovimentationBaseDTO>> createMovimentation(@RequestBody MovimentationBaseDTO movimentation) {
@@ -39,6 +41,8 @@ public class MovimentationController {
         try {
             MovimentationBaseDTO createdMovimentation = movimentationService.save(movimentation);
             response.data = createdMovimentation;
+
+            webSocketHandler.sendToRedis(new WebSocketMessageTemplate(movimentation.productId, null, "refresh-movimentations"));
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
             response.errorMessage = "Error creating movimentation: " + e.getMessage();

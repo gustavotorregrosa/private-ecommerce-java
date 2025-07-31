@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { HttpService } from '../../../../services/httpService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,6 +9,8 @@ import { IStockPosition } from '../../../../interfaces/IStockPosition';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { AddMovimentationModal } from '../add-movimentation/add-movimentation';
+import { refreshMovimentationsObservable } from '../../../../misc/observables';
+import { Subscription } from 'rxjs';
 
 
 export interface IModalData {
@@ -22,12 +24,13 @@ export interface IModalData {
   templateUrl: './movimentations.html',
   styleUrl: './movimentations.scss'
 })
-export class Movimentations implements OnInit, AfterViewInit {
+export class Movimentations implements OnInit, AfterViewInit, OnDestroy {
 
   private productId: string | null = null;
   private chart: Chart | null = null;
   private ctx: HTMLCanvasElement | null = null;
   private stockPositions: IStockPosition[] = [];
+  private subscription: Subscription | null = null;
 
   public getStockPositions(): IStockPosition[] {
     return this.stockPositions;
@@ -42,7 +45,19 @@ export class Movimentations implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.productId = this.route.snapshot.params['productId'];
-    console.log('Product ID:', this.productId);
+     this.subscription = refreshMovimentationsObservable.subscribe((changedProductID: string) => {
+  
+      if (this.productId === changedProductID) {
+        this.loadStockPositions();
+      }
+    });
+  }
+
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
 
