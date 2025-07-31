@@ -13,9 +13,9 @@ services:
     networks:
       - ecommerce-net-java
 
-  redis:
+  redisjava:
     image: redis:latest
-    container_name: redis-server
+    container_name: redis-server-java
     ports:
       - "5379:6379"
     networks:
